@@ -1,0 +1,128 @@
+# =============================================================================
+# TikStream AI — AI Agent 最高纯度行为契约 (Cursor Rules)
+# =============================================================================
+
+## 角色定义
+你是 TikStream AI 项目的专用 AI 编码助手。本项目是面向 TikTok Shop 的 AIGC 带货视频生成系统。
+你必须严格遵循本文档中的所有约束，不得偏离。
+
+## 技术栈锁定
+
+### 前端
+- React 18 (SPA)
+- TypeScript 5 (strict mode)
+- Vite 5 (build tool)
+- shadcn/ui (通用交互组件库，基于 Radix UI)
+- Tailwind CSS (响应式布局与样式)
+- Zustand 4 (全局状态管理)
+- Remotion 4 Player (视频预览与时间轴渲染)
+- ECharts 5 (分析看板图表)
+
+### 后端
+- NestJS 10 (核心网关与状态编排)
+- Node.js 22
+- Prisma ORM 5 (数据库访问)
+- BullMQ 5 (异步任务队列)
+- JSON Patch (RFC 6902, 分镜局部编辑)
+
+### 基础设施
+- PostgreSQL 16 (关系型主数据)
+- Redis 7 (限流计数 / 分布式信号量 / BullMQ 底座)
+- Qdrant (512维 ImageBind 向量检索)
+- MinIO (对象存储：素材/切片/字幕/音轨/渲染缓存/导出视频)
+- DuckDB (分析看板预计算，离线执行)
+- Docker / Docker Compose (容器化)
+- GitHub Actions (CI/CD)
+
+### AI 与媒体处理
+- Doubao-Seed-2.0-pro (文本生成: 剧本/Dense Caption/爆款拆解)
+- Doubao-Seedance-1.5-pro (图生视频兜底)
+- Meta ImageBind (多模态向量化, 常驻 GPU)
+- F5-TTS (旁白语音合成, 常驻 GPU)
+- Decord + TransNetV2 (视频切片与转场检测)
+- YOLOv11 (ROI 检测, 按需加载)
+- HTDemucs v4 (音源分离/SFX 提取, 按需加载)
+- Faster-Whisper (语音识别, 按需加载)
+- FFmpeg 6 (音视频处理/loudnorm)
+- Headless Chromium (Remotion 渲染)
+
+### 开发工具链
+- pnpm 9 (包管理器, Monorepo workspace)
+- ESLint + Prettier + Husky + StyleLint
+- kebab-case 目录与文件名 / PascalCase 类与接口 / camelCase 变量与函数 / snake_case 数据库与 API 字段 / UPPER_SNAKE_CASE 常量与枚举值
+
+## 硬性行为契约 (MANDATORY)
+
+### 代码输出规则
+1. 绝对禁止使用 `// ...` 或 `// TODO` 省略任何代码逻辑。
+2. 绝对禁止使用 `...existing code...` 或任何占位符代替完整实现。
+3. 绝对禁止输出伪代码、示意代码或未实现的存根 (stub)。
+4. 每个函数体必须包含完整的可运行实现代码。
+5. 所有异常分支必须显式处理，不得用空 catch 块吞噬错误。
+6. 所有跨模块调用的返回值必须显式声明类型。
+7. 每次修改代码后必须通过 `pnpm typecheck` 验证，不得提交类型错误。
+
+### 架构约束
+1. Controller 层只做协议适配、参数校验与授权边界，不写业务逻辑。
+2. Service 层承载业务编排，Repository 只做数据访问。
+3. Worker 只处理异步任务，不直接承担前端交互逻辑。
+4. 共享类型 (`packages/shared-types`) 只放稳定契约，不放临时实现。
+5. BullMQ Job Processor 只调用 Service 方法，不直接操作数据库或调用 AI 模型。
+6. Prompt 文本统一存放于 `services/prompts/` 目录，不在 Service 中硬编码。
+7. AI 模型调用统一通过 `services/ai/` 下的 Provider 封装，承担限流/重试/降级。
+8. 工作流上下文 (task_id/trace_id/product_id/阶段) 通过 NestJS CLS (AsyncLocalStorage) 贯穿生命周期。
+
+### 模块分工边界 (绝对不可越界)
+- 人员 A 负责的模块: Material (素材), Creation (创作), GPU Slicing Worker, Remotion Render Worker, 前端工作台
+- 人员 B 负责的模块: Script (剧本), Analytics (分析看板), 接口契约, 数据分析
+- 公共模块: Task Management (任务管理), Template (模板市场), Health Check, Trace, CI/CD
+- 跨模块字段变更必须同步更新共享类型与接口文档，不得单方面修改
+
+## VRAM 预算硬卡点 (RTX 5080 16GB)
+
+### GPU 显存分配
+常驻模型 (总计 ≈8.5GB):
+- Decord + TransNetV2: 约 2.0GB
+- Meta ImageBind: 约 3.0GB
+- F5-TTS: 约 3.5GB
+
+按需互斥模型 (总计峰值 ≈5.5GB, 执行后立即释放):
+- HTDemucs: 约 2.0GB
+- Faster-Whisper: 约 2.0GB
+- YOLOv11: 约 1.5GB
+
+### 硬性约束
+1. 素材与处理链路 VRAM 预算上限: 8GB (含常驻模型)。
+2. 安全余量: 7.0GB 留给 FFmpeg、Chromium 和多分镜渲染时的显存峰值波动。
+3. 所有按需模型执行后必须在 finally 块中显式释放显存 (`.to('cpu')` + `del` + `torch.cuda.empty_cache()`)。
+4. 渲染多分镜时优先串行执行，控制 Chromium 实例数量 ≤2。
+5. 禁止同时加载 HTDemucs 和 Faster-Whisper 到 GPU。
+
+## API 配额治理
+- Doubao 文本模型 (Seed-2.0-pro): Token Bucket 80 RPM, 5帧聚合请求, 429 指数退避重试
+- Doubao 视频模型 (Seedance-1.5-pro): 分布式信号量并发上限 3, 专用 BullMQ 队列, 随机扰动延迟重试
+
+## 数据库核心约束
+- 视频总时长 ≤15.0s
+- 单分镜时长 1.5s~5.0s
+- 切片时长 1.5s~4.0s (超出 5.0s 强制等距切为 3.0s 级别, 不足 1.5s 舍弃)
+- 图片最大 10MB, 视频最大 200MB
+- product_id 是所有查询的上下文隔离边界
+
+## 创作状态机 (不可偏离的阶段顺序)
+```
+QUEUE_ALLOCATION → ASSET_MATCHING → AI_VIDEO_GENERATING → TTS_GENERATING → FFMPEG_STITCHING → LOUDNORM_COMPLIANCE → FINISHED
+                                                                                                         ↘ FAILED
+```
+
+## 命名一致性要求
+- 所有对外字段必须与 Prisma Schema / API 文档一致
+- task_id 格式: `tsk_{YYYYMMDD}_{6位序号}`
+- trace_id 格式: `trc_{YYYYMMDD}_{描述}`
+- API 路径前缀: 外部 `/api/v1`, 内部回调 `/api/internal/v1`
+- 禁止使用 `progress_update`、`/api/video/*` 等非标准命名
+
+## 质量门禁
+- 合入 main 前必须通过: `pnpm lint`, `pnpm typecheck`, `pnpm test`, `pnpm build`
+- `pnpm openapi:lint` 为 CI 硬门禁，不符规约不可合入
+- 所有 PR 必须包含: 变更摘要、影响范围、验证结果、回滚方式

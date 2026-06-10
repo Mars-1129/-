@@ -1,0 +1,8 @@
+4. [GET] http://localhost:3000/api/v1/creations?product_id=915c3fcb-75f4-4aab-a82e-cdebf5bf271f&limit=50 => [200] OK
+6. [GET] http://localhost:3000/api/v1/creations?product_id=915c3fcb-75f4-4aab-a82e-cdebf5bf271f&limit=50 => [200] OK
+7. [GET] http://localhost:3000/api/v1/creations?product_id=915c3fcb-75f4-4aab-a82e-cdebf5bf271f&limit=50 => [200] OK
+8. [GET] http://localhost:3000/api/v1/analytics/retention-curve?product_id=915c3fcb-75f4-4aab-a82e-cdebf5bf271f&creation_id=2f0d5b44-2998-4a88-b8d5-0dec5002f7d3&metric_type=RETENTION_RATE&granularity=SECOND&include_shot_markers=true => [200] OK
+9. [GET] http://localhost:3000/api/v1/analytics/style-factors?product_id=915c3fcb-75f4-4aab-a82e-cdebf5bf271f&metric=RETENTION_RATE&x_dimension=NARRATIVE_STRATEGY&y_dimension=VISUAL_STYLE&top_n=5 => [200] OK
+10. [GET] http://localhost:3000/api/v1/analytics/audio-visual-sankey?product_id=915c3fcb-75f4-4aab-a82e-cdebf5bf271f&creation_id=2f0d5b44-2998-4a88-b8d5-0dec5002f7d3 => [200] OK
+
+Note: 3 static requests not shown, run with "static" option to see them.

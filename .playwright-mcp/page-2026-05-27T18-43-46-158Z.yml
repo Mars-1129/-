@@ -1,0 +1,325 @@
+- generic [ref=e4]:
+  - complementary [ref=e18]:
+    - generic [ref=e19]:
+      - generic [ref=e20]:
+        - img [ref=e22]
+        - generic [ref=e32]:
+          - generic [ref=e33]: TikStream AI
+          - generic [ref=e34]: 业务前端工作台
+      - generic [ref=e35]:
+        - generic [ref=e36]: 真实 API
+        - generic [ref=e37]: http://localhost:3000
+    - navigation [ref=e38]:
+      - link "素材工作台 上传、切片、检索" [ref=e39] [cursor=pointer]:
+        - /url: /materials
+        - generic [ref=e40]:
+          - img [ref=e41]
+          - generic [ref=e45]:
+            - generic [ref=e46]: 素材工作台
+            - generic [ref=e47]: 上传、切片、检索
+      - link "剧本编辑器 生成、Patch、校验" [ref=e48] [cursor=pointer]:
+        - /url: /scripts
+        - generic [ref=e49]:
+          - img [ref=e50]
+          - generic [ref=e52]:
+            - generic [ref=e53]: 剧本编辑器
+            - generic [ref=e54]: 生成、Patch、校验
+      - link "创作预览 预览、导出、重渲染" [ref=e55] [cursor=pointer]:
+        - /url: /create
+        - generic [ref=e56]:
+          - img [ref=e57]
+          - generic [ref=e60]:
+            - generic [ref=e61]: 创作预览
+            - generic [ref=e62]: 预览、导出、重渲染
+      - link "任务历史 进度、日志、重试" [ref=e63] [cursor=pointer]:
+        - /url: /tasks
+        - generic [ref=e64]:
+          - img [ref=e65]
+          - generic [ref=e68]:
+            - generic [ref=e69]: 任务历史
+            - generic [ref=e70]: 进度、日志、重试
+      - link "分析看板 归因、A/B、自愈" [ref=e71] [cursor=pointer]:
+        - /url: /analytics
+        - generic [ref=e72]:
+          - img [ref=e73]
+          - generic [ref=e76]:
+            - generic [ref=e77]: 分析看板
+            - generic [ref=e78]: 归因、A/B、自愈
+      - link "模板市场 模板详情与套用" [ref=e79] [cursor=pointer]:
+        - /url: /templates
+        - generic [ref=e80]:
+          - img [ref=e81]
+          - generic [ref=e85]:
+            - generic [ref=e86]: 模板市场
+            - generic [ref=e87]: 模板详情与套用
+    - generic [ref=e89]:
+      - generic [ref=e90]: 商品上下文
+      - generic [ref=e91]: TikStream 演示商品
+      - generic [ref=e92]: beauty · TKS-DEMO-SKU-001
+      - generic [ref=e93]:
+        - generic [ref=e94]: 15秒高转化短视频
+        - generic [ref=e95]: AI自动生成分镜
+        - generic [ref=e96]: 适配TikTok Shop
+  - generic [ref=e97]:
+    - banner [ref=e98]:
+      - generic [ref=e99]:
+        - generic [ref=e100]:
+          - generic [ref=e101]: 分析看板
+          - heading "归因、A/B、自愈" [level=1] [ref=e102]
+        - generic [ref=e103]:
+          - combobox [ref=e105]:
+            - option "TikStream 演示商品" [selected]
+          - button "刷新上下文" [ref=e106] [cursor=pointer]:
+            - img [ref=e107]
+            - text: 刷新上下文
+    - main [ref=e112]:
+      - generic [ref=e113]:
+        - generic [ref=e114]:
+          - generic [ref=e115]:
+            - generic [ref=e116]:
+              - generic [ref=e117]:
+                - heading "分析看板" [level=3] [ref=e118]
+                - paragraph [ref=e119]: 围绕 creation 维度查看留存、风格因子、音画归因、A/B 对比与自愈建议。
+              - generic [ref=e120]:
+                - generic [ref=e121]: 当前商品：TikStream 演示商品
+                - generic [ref=e122]: Mock / 预计算数据
+                - generic [ref=e123]: 包含预测指标
+                - generic [ref=e124]: 数据源：DUCKDB_PRECOMPUTED
+                - generic [ref=e125]: 更新时间：2026/5/28 02:42:52
+            - button "刷新看板" [ref=e126] [cursor=pointer]:
+              - img [ref=e127]
+              - text: 刷新看板
+          - generic [ref=e133]:
+            - generic [ref=e135]:
+              - generic [ref=e136]: 主版本
+              - combobox [ref=e137]:
+                - option "请选择创作版本"
+                - option "4c7012f5 · FINISHED · 2026/5/28 02:41:50" [selected]
+                - option "2f0d5b44 · FINISHED · 2026/5/28 02:21:09"
+            - generic [ref=e139]:
+              - generic [ref=e140]: 对比版本
+              - combobox [ref=e141]:
+                - option "不做 A/B 对比"
+                - option "2f0d5b44 · FINISHED · 2026/5/28 02:21:09" [selected]
+            - generic [ref=e142]:
+              - generic [ref=e143]: 风格指标
+              - combobox [ref=e144]:
+                - option "留存率" [selected]
+                - option "完播率"
+                - option "CTR"
+                - option "CVR"
+        - generic [ref=e145]:
+          - generic [ref=e146]:
+            - generic [ref=e147]: 平均留存
+            - generic [ref=e148]: 79.1%
+            - generic [ref=e149]: 当前未发现明确掉点镜头
+          - generic [ref=e150]:
+            - generic [ref=e151]: 最终完播
+            - generic [ref=e152]: 57.0%
+            - generic [ref=e153]: 总时长 14s
+          - generic [ref=e154]:
+            - generic [ref=e155]: 当前版本状态
+            - generic [ref=e156]: 100%
+            - generic [ref=e157]: FINISHED · FINISHED
+          - generic [ref=e158]:
+            - generic [ref=e159]: 版本数量
+            - generic [ref=e160]: "2"
+            - generic [ref=e161]: 已满足 A/B 对比条件
+        - generic [ref=e162]:
+          - generic [ref=e163]:
+            - generic [ref=e164]:
+              - generic [ref=e165]:
+                - generic [ref=e166]:
+                  - heading "留存曲线" [level=3] [ref=e167]:
+                    - img [ref=e168]
+                    - text: 留存曲线
+                  - paragraph [ref=e170]: 按秒查看留存变化，并结合掉点和镜头区间定位问题位置。
+                - generic [ref=e171]: creation：4c7012f5-cb1c-42ef-a3ee-e2e7f1d3bf1f
+              - generic [ref=e176]:
+                - generic [ref=e177]:
+                  - generic [ref=e178]: 主要掉点原因
+                  - generic [ref=e179]: 暂无明显掉点
+                - generic [ref=e180]:
+                  - generic [ref=e181]: 掉点镜头
+                  - generic [ref=e182]: 暂无
+                - generic [ref=e183]:
+                  - generic [ref=e184]: Marker 数量
+                  - generic [ref=e185]: "5"
+            - generic [ref=e186]:
+              - generic [ref=e187]:
+                - generic [ref=e188]:
+                  - heading "风格因子热力图" [level=3] [ref=e189]:
+                    - img [ref=e190]
+                    - text: 风格因子热力图
+                  - paragraph [ref=e193]: 按指标查看风格维度间的贡献分布，并标出正负因子。
+                - generic [ref=e194]:
+                  - combobox [ref=e195]:
+                    - option "X：叙事策略" [selected]
+                    - option "X：视觉风格"
+                    - option "X：BGM 风格"
+                    - option "X：CTA 风格"
+                  - combobox [ref=e196]:
+                    - option "Y：叙事策略"
+                    - option "Y：视觉风格" [selected]
+                    - option "Y：BGM 风格"
+                    - option "Y：CTA 风格"
+              - generic [ref=e201]:
+                - generic [ref=e202]:
+                  - generic [ref=e203]: Top Positive
+                  - generic [ref=e204]:
+                    - generic [ref=e205]:
+                      - generic [ref=e206]: 问题前置型 × 产品特写
+                      - generic [ref=e207]: 49.4%
+                    - generic [ref=e208]:
+                      - generic [ref=e209]: 对比反差型 × 场景展示
+                      - generic [ref=e210]: 49.3%
+                    - generic [ref=e211]:
+                      - generic [ref=e212]: 对比反差型 × 产品特写
+                      - generic [ref=e213]: 36.6%
+                    - generic [ref=e214]:
+                      - generic [ref=e215]: 悬念递进型 × 文字叠加
+                      - generic [ref=e216]: 35.7%
+                    - generic [ref=e217]:
+                      - generic [ref=e218]: 问题前置型 × 文字叠加
+                      - generic [ref=e219]: 34.4%
+                - generic [ref=e220]:
+                  - generic [ref=e221]: Top Negative
+                  - generic [ref=e222]:
+                    - generic [ref=e223]:
+                      - generic [ref=e224]: 清单罗列型 × 动画演示
+                      - generic [ref=e225]: "-23.4%"
+                    - generic [ref=e226]:
+                      - generic [ref=e227]: 悬念递进型 × 动画演示
+                      - generic [ref=e228]: "-22.7%"
+                    - generic [ref=e229]:
+                      - generic [ref=e230]: 故事叙述型 × 文字叠加
+                      - generic [ref=e231]: "-22.3%"
+                    - generic [ref=e232]:
+                      - generic [ref=e233]: 悬念递进型 × 产品特写
+                      - generic [ref=e234]: "-22.3%"
+                    - generic [ref=e235]:
+                      - generic [ref=e236]: 清单罗列型 × 场景展示
+                      - generic [ref=e237]: "-14.3%"
+            - generic [ref=e239]:
+              - heading "音画归因 Sankey" [level=3] [ref=e240]:
+                - img [ref=e241]
+                - text: 音画归因 Sankey
+              - paragraph [ref=e244]: 查看 BGM、视觉风格与留存桶之间的流向关系。
+          - generic [ref=e249]:
+            - generic [ref=e250]:
+              - generic [ref=e251]:
+                - heading "版本上下文" [level=3] [ref=e252]
+                - paragraph [ref=e253]: 主版本状态、导出结果与分析维度选择结果。
+              - generic [ref=e254]:
+                - generic [ref=e255]:
+                  - generic [ref=e256]:
+                    - generic [ref=e257]: 4c7012f5-cb1c-42ef-a3ee-e2e7f1d3bf1f
+                    - generic [ref=e258]: FINISHED
+                  - generic [ref=e259]:
+                    - generic [ref=e260]: 阶段：FINISHED
+                    - generic [ref=e261]: 进度：100%
+                    - generic [ref=e262]: 更新时间：2026/5/28 02:41:50
+                    - generic [ref=e263]: 导出格式：MP4
+                    - generic [ref=e264]: 分辨率：1080x1920
+                    - generic [ref=e265]: trace_id：trc_20260527_creation_4c7012f5
+                - link "打开当前导出结果" [ref=e266] [cursor=pointer]:
+                  - /url: http://localhost:3102/artifacts/4c7012f5-cb1c-42ef-a3ee-e2e7f1d3bf1f.mp4
+            - generic [ref=e267]:
+              - generic [ref=e268]:
+                - heading "A/B 对比" [level=3] [ref=e269]:
+                  - img [ref=e270]
+                  - text: A/B 对比
+                - paragraph [ref=e273]: 需要两个 creation 版本才能得到指标与诊断建议。
+              - generic [ref=e274]:
+                - generic [ref=e275]:
+                  - generic [ref=e276]:
+                    - generic [ref=e277]: Version A
+                    - generic [ref=e278]: "版本A: 15秒高转化短视频短视频脚本"
+                    - generic [ref=e279]:
+                      - generic [ref=e280]: CTR：13.8%
+                      - generic [ref=e281]: CVR：7.6%
+                      - generic [ref=e282]: 完播：83.5%
+                  - generic [ref=e283]:
+                    - generic [ref=e284]: Version B
+                    - generic [ref=e285]: "版本B: 15秒高转化短视频短视频脚本"
+                    - generic [ref=e286]:
+                      - generic [ref=e287]: CTR：7.8%
+                      - generic [ref=e288]: CVR：4.4%
+                      - generic [ref=e289]: 完播：58.5%
+                - generic [ref=e290]:
+                  - generic [ref=e291]: 对比结论
+                  - generic [ref=e292]: 胜出版本：A
+                  - generic [ref=e293]:
+                    - generic [ref=e294]:
+                      - generic [ref=e295]: retention_rate
+                      - generic [ref=e296]: "-0.27"
+                    - generic [ref=e297]:
+                      - generic [ref=e298]: completion_rate
+                      - generic [ref=e299]: "0.25"
+                    - generic [ref=e300]:
+                      - generic [ref=e301]: ctr
+                      - generic [ref=e302]: "0.06"
+                    - generic [ref=e303]:
+                      - generic [ref=e304]: cvr
+                      - generic [ref=e305]: "0.03"
+                    - generic [ref=e306]:
+                      - generic [ref=e307]: avg_shot_duration
+                      - generic [ref=e308]: "0.00"
+                - generic [ref=e309]:
+                  - generic [ref=e310]: 诊断建议
+                  - generic [ref=e311]:
+                    - generic [ref=e312]: 版本 A 在 完成率、CTR、CVR 等 3/4 项指标上优于版本 B
+                    - generic [ref=e313]: 建议保留版本 A 的高转化 UGC策略，可借鉴版本 B 的部分优势因子进行增量优化
+            - generic [ref=e314]:
+              - generic [ref=e315]:
+                - heading "自愈建议 / 自愈任务" [level=3] [ref=e316]:
+                  - img [ref=e317]
+                  - text: 自愈建议 / 自愈任务
+                - paragraph [ref=e319]: 支持 dry-run 建议，也支持直接下发修复任务。
+              - generic [ref=e320]:
+                - generic [ref=e321]:
+                  - combobox [ref=e322]:
+                    - option "触发源：手动触发" [selected]
+                    - option "触发源：留存下滑"
+                    - option "触发源：A/B 对比"
+                  - combobox [ref=e323]:
+                    - option "问题：开场 Hook 弱" [selected]
+                    - option "问题：口播过长"
+                    - option "问题：风格不匹配"
+                    - option "问题：CTA 偏弱"
+                  - combobox [ref=e324]:
+                    - option "策略：仅改写文案" [selected]
+                    - option "策略：局部重渲染"
+                    - option "策略：生成新版本"
+                  - textbox "目标镜头，例如 1,3" [ref=e325]: "1"
+                - textbox "补充说明，例如希望优先修复首屏 Hook 与 CTA。" [ref=e326]: 优先修复首屏 Hook
+                - generic [ref=e327]:
+                  - button "生成建议" [ref=e328] [cursor=pointer]:
+                    - img [ref=e349]
+                    - text: 生成建议
+                  - button "提交自愈任务" [ref=e331] [cursor=pointer]:
+                    - img [ref=e351]
+                    - text: 提交自愈任务
+                - generic [ref=e356]:
+                  - generic [ref=e357]:
+                    - img [ref=e358]
+                    - generic [ref=e360]: 状态：SUGGESTED
+                  - generic [ref=e361]:
+                    - generic [ref=e362]: 建议摘要：检测到 开场钩子吸引力不足 问题，共 1 个分镜受影响。建议采用 仅重写分镜剧本 策略：开场 hook_strength 仅 0.15，低于阈值 0.45，建议用更强钩子类型替换。dry_run 模式下未执行实际操作。
+                    - generic [ref=e363]: dry-run：是
+                    - generic [ref=e364]: task_id：--
+                    - generic [ref=e365]: healed_creation_id：--
+                    - generic [ref=e366]:
+                      - text: 影响镜头：
+                      - generic [ref=e368]: 第 1 镜 · REWRITE_SHOT_SCRIPT · 开场 hook_strength 仅 0.15，低于阈值 0.45，建议用更强钩子类型替换
+            - generic [ref=e337]:
+              - generic [ref=e338]:
+                - heading "当前对比目标" [level=3] [ref=e339]
+                - paragraph [ref=e340]: 便于确认 A/B 版本选择是否正确。
+              - generic [ref=e342]:
+                - generic [ref=e343]: 2f0d5b44-2998-4a88-b8d5-0dec5002f7d3
+                - generic [ref=e344]:
+                  - generic [ref=e345]: 状态：FINISHED
+                  - generic [ref=e346]: 阶段：FINISHED
+                  - generic [ref=e347]: 进度：100%
+                  - generic [ref=e348]: 更新时间：2026/5/28 02:21:09

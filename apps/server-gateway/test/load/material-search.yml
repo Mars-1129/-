@@ -1,0 +1,68 @@
+config:
+  target: "http://localhost:3000"
+  phases:
+    - duration: 30
+      arrivalRate: 5
+      name: "Warm up"
+    - duration: 60
+      arrivalRate: 10
+      rampTo: 30
+      name: "Main load"
+  defaults:
+    headers:
+      Content-Type: "application/json"
+
+scenarios:
+  - name: "Material Search - VECTOR mode"
+    weight: 2
+    flow:
+      - post:
+          url: "/api/v1/materials/search"
+          json:
+            product_id: "test-product"
+            query: "卷发棒"
+            search_mode: "VECTOR"
+            limit: 10
+
+  - name: "Material Search - FUSION mode"
+    weight: 3
+    flow:
+      - post:
+          url: "/api/v1/materials/search"
+          json:
+            product_id: "test-product"
+            query: "美容仪"
+            search_mode: "FUSION"
+            granularity: "hybrid"
+            limit: 10
+
+  - name: "Material List - Pagination"
+    weight: 2
+    flow:
+      - get:
+          url: "/api/v1/materials"
+          qs:
+            product_id: "test-product"
+            limit: 20
+
+  - name: "Material Search - KEYWORD mode"
+    weight: 1
+    flow:
+      - post:
+          url: "/api/v1/materials/search"
+          json:
+            product_id: "test-product"
+            query: "口红"
+            search_mode: "KEYWORD"
+            limit: 10
+
+  - name: "Material Search - Material granularity"
+    weight: 2
+    flow:
+      - post:
+          url: "/api/v1/materials/search"
+          json:
+            product_id: "test-product"
+            query: "护肤品"
+            granularity: "material"
+            limit: 10

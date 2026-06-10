@@ -1,0 +1,123 @@
+- generic [ref=e4]:
+  - complementary [ref=e18]:
+    - generic [ref=e19]:
+      - generic [ref=e20]:
+        - img [ref=e22]
+        - generic [ref=e32]:
+          - generic [ref=e33]: TikStream AI
+          - generic [ref=e34]: 业务前端工作台
+      - generic [ref=e35]:
+        - generic [ref=e36]: 真实 API
+        - generic [ref=e37]: http://localhost:3000
+    - navigation [ref=e38]:
+      - link "素材工作台 上传、切片、检索" [ref=e39] [cursor=pointer]:
+        - /url: /materials
+        - generic [ref=e40]:
+          - img [ref=e41]
+          - generic [ref=e45]:
+            - generic [ref=e46]: 素材工作台
+            - generic [ref=e47]: 上传、切片、检索
+      - link "剧本编辑器 生成、Patch、校验" [ref=e48] [cursor=pointer]:
+        - /url: /scripts
+        - generic [ref=e49]:
+          - img [ref=e50]
+          - generic [ref=e52]:
+            - generic [ref=e53]: 剧本编辑器
+            - generic [ref=e54]: 生成、Patch、校验
+      - link "创作预览 预览、导出、重渲染" [ref=e55] [cursor=pointer]:
+        - /url: /create
+        - generic [ref=e56]:
+          - img [ref=e57]
+          - generic [ref=e60]:
+            - generic [ref=e61]: 创作预览
+            - generic [ref=e62]: 预览、导出、重渲染
+      - link "任务历史 进度、日志、重试" [ref=e63] [cursor=pointer]:
+        - /url: /tasks
+        - generic [ref=e64]:
+          - img [ref=e65]
+          - generic [ref=e68]:
+            - generic [ref=e69]: 任务历史
+            - generic [ref=e70]: 进度、日志、重试
+      - link "分析看板 归因、A/B、自愈" [ref=e71] [cursor=pointer]:
+        - /url: /analytics
+        - generic [ref=e72]:
+          - img [ref=e73]
+          - generic [ref=e76]:
+            - generic [ref=e77]: 分析看板
+            - generic [ref=e78]: 归因、A/B、自愈
+      - link "模板市场 模板详情与套用" [ref=e79] [cursor=pointer]:
+        - /url: /templates
+        - generic [ref=e80]:
+          - img [ref=e81]
+          - generic [ref=e85]:
+            - generic [ref=e86]: 模板市场
+            - generic [ref=e87]: 模板详情与套用
+    - generic [ref=e89]:
+      - generic [ref=e90]: 商品上下文
+      - generic [ref=e91]: TikStream 演示商品
+      - generic [ref=e92]: beauty · TKS-DEMO-SKU-001
+      - generic [ref=e93]:
+        - generic [ref=e94]: 15秒高转化短视频
+        - generic [ref=e95]: AI自动生成分镜
+        - generic [ref=e96]: 适配TikTok Shop
+  - generic [ref=e97]:
+    - banner [ref=e98]:
+      - generic [ref=e99]:
+        - generic [ref=e100]:
+          - generic [ref=e101]: 剧本编辑器
+          - heading "生成、Patch、校验" [level=1] [ref=e102]
+        - generic [ref=e103]:
+          - combobox [ref=e105]:
+            - option "TikStream 演示商品" [selected]
+          - button "刷新上下文" [ref=e106] [cursor=pointer]:
+            - img [ref=e107]
+            - text: 刷新上下文
+    - main [ref=e112]:
+      - generic [ref=e113]:
+        - generic [ref=e114]:
+          - generic [ref=e115]:
+            - generic [ref=e116]:
+              - heading "真实剧本生成" [level=3] [ref=e117]
+              - paragraph [ref=e118]: 保留 quick / viral rewrite / template 三种入口，全部接真实 Nest API。
+            - generic [ref=e119]:
+              - generic [ref=e120]:
+                - button "快速生成" [ref=e121] [cursor=pointer]
+                - button "模板生成" [ref=e122] [cursor=pointer]
+                - button "爆款仿写" [ref=e123] [cursor=pointer]
+              - textbox "剧本标题（可选）" [ref=e124]
+              - generic [ref=e125]:
+                - textbox "zh-CN" [ref=e126]
+                - combobox [ref=e127]:
+                  - option "9:16" [selected]
+                  - option "16:9"
+              - textbox "高转化 UGC / 强节奏口播 / 开箱对比" [ref=e128]: 高转化 UGC
+              - textbox "约束条件，逗号或换行分隔，例如：禁止夸大功效、首屏 3 秒必须给卖点" [ref=e129]
+              - generic [ref=e130]:
+                - generic [ref=e131]: 当前商品上下文
+                - generic [ref=e132]: TikStream 演示商品
+                - generic [ref=e133]: 15秒高转化短视频 · AI自动生成分镜 · 适配TikTok Shop
+              - generic [ref=e158]: 内部服务器错误
+              - button "生成真实剧本" [ref=e134] [cursor=pointer]:
+                - img [ref=e159]
+                - text: 生成真实剧本
+          - generic [ref=e137]:
+            - generic [ref=e138]:
+              - heading "剧本列表" [level=3] [ref=e139]
+              - paragraph [ref=e140]: 按商品拉取真实剧本列表，当前工作稿件可继续 Patch 编辑与保存。
+            - generic [ref=e141]:
+              - generic [ref=e142]:
+                - generic [ref=e143]: 0 份剧本
+                - button "刷新" [ref=e144] [cursor=pointer]:
+                  - img [ref=e145]
+                  - text: 刷新
+              - generic [ref=e147]: 当前商品还没有剧本，先生成一份真实稿件。
+        - generic [ref=e149]:
+          - generic [ref=e151]:
+            - generic [ref=e152]:
+              - heading "当前工作稿件" [level=3] [ref=e153]
+              - paragraph [ref=e154]: 选中分镜后直接生成 JSON Patch，并在右侧实时显示配时建议。
+            - generic [ref=e155]:
+              - button "保存剧本" [disabled]:
+                - img
+                - text: 保存剧本
+          - generic [ref=e157]: 先在左侧生成或选择一份剧本。

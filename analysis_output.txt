@@ -1,0 +1,406 @@
+
+========================================
+=== 分析语种: en-US ===
+========================================
+
+--- 基本统计 ---
+zh-CN 总 key 数: 1175
+en-US 总 key 数: 1140
+缺失 key 数: 35
+多余 key 数: 0
+重复 key 数: 0
+插值变量不一致: 0
+空值 key 数: 1
+
+--- (a) 缺失的 Key (按模块分组) ---
+
+  [task] (34 个):
+    - task.listLoadFailed
+    - task.detailLoadFailed
+    - task.completedTitle
+    - task.completedNotification
+    - task.failedTitle
+    - task.executionFailed
+    - task.taskCanceled
+    - task.cancelFailed
+    - task.taskRetried
+    - task.retryFailed
+    - task.batchCancelResult
+    - task.batchCancelException
+    - task.batchRetryResult
+    - task.batchRetryException
+    - task.movedToTrash
+    - task.deleteFailed
+    - task.taskRestored
+    - task.restoreFailed
+    - task.taskPermanentlyDeleted
+    - task.permanentDeleteFailed
+    - task.batchDeleteException
+    - task.trashEmptied
+    - task.emptyTrashFailed
+    - task.executionFailedLabel
+    - task.checkErrorAndRetry
+    - task.retryTaskBtn
+    - task.creationIdLabel
+    - task.traceIdLabel
+    - task.taskIdPrefix
+    - task.executionFailedMsg
+    - task.retrySuggestion
+    - task.retryBtn
+    - task.deletedTime
+    - task.batchDeleteResult
+
+  [coldStart] (1 个):
+    - coldStart.categoryCTA
+
+--- (b) 多余的 Key --- 无
+
+--- (c) 重复 Key --- 无
+
+--- (d) 插值变量不一致 --- 无
+
+--- (e) 翻译值为空 ---
+  > comments.skippedCount: 值为空
+
+========================================
+=== 分析语种: id-ID ===
+========================================
+
+--- 基本统计 ---
+zh-CN 总 key 数: 1175
+id-ID 总 key 数: 1140
+缺失 key 数: 35
+多余 key 数: 0
+重复 key 数: 0
+插值变量不一致: 0
+空值 key 数: 1
+
+--- (a) 缺失的 Key (按模块分组) ---
+
+  [task] (34 个):
+    - task.listLoadFailed
+    - task.detailLoadFailed
+    - task.completedTitle
+    - task.completedNotification
+    - task.failedTitle
+    - task.executionFailed
+    - task.taskCanceled
+    - task.cancelFailed
+    - task.taskRetried
+    - task.retryFailed
+    - task.batchCancelResult
+    - task.batchCancelException
+    - task.batchRetryResult
+    - task.batchRetryException
+    - task.movedToTrash
+    - task.deleteFailed
+    - task.taskRestored
+    - task.restoreFailed
+    - task.taskPermanentlyDeleted
+    - task.permanentDeleteFailed
+    - task.batchDeleteException
+    - task.trashEmptied
+    - task.emptyTrashFailed
+    - task.executionFailedLabel
+    - task.checkErrorAndRetry
+    - task.retryTaskBtn
+    - task.creationIdLabel
+    - task.traceIdLabel
+    - task.taskIdPrefix
+    - task.executionFailedMsg
+    - task.retrySuggestion
+    - task.retryBtn
+    - task.deletedTime
+    - task.batchDeleteResult
+
+  [coldStart] (1 个):
+    - coldStart.categoryCTA
+
+--- (b) 多余的 Key --- 无
+
+--- (c) 重复 Key --- 无
+
+--- (d) 插值变量不一致 --- 无
+
+--- (e) 翻译值为空 ---
+  > comments.skippedCount: 值为空
+
+========================================
+=== 分析语种: th-TH ===
+========================================
+
+--- 基本统计 ---
+zh-CN 总 key 数: 1175
+th-TH 总 key 数: 1140
+缺失 key 数: 35
+多余 key 数: 0
+重复 key 数: 0
+插值变量不一致: 0
+空值 key 数: 1
+
+--- (a) 缺失的 Key (按模块分组) ---
+
+  [task] (34 个):
+    - task.listLoadFailed
+    - task.detailLoadFailed
+    - task.completedTitle
+    - task.completedNotification
+    - task.failedTitle
+    - task.executionFailed
+    - task.taskCanceled
+    - task.cancelFailed
+    - task.taskRetried
+    - task.retryFailed
+    - task.batchCancelResult
+    - task.batchCancelException
+    - task.batchRetryResult
+    - task.batchRetryException
+    - task.movedToTrash
+    - task.deleteFailed
+    - task.taskRestored
+    - task.restoreFailed
+    - task.taskPermanentlyDeleted
+    - task.permanentDeleteFailed
+    - task.batchDeleteException
+    - task.trashEmptied
+    - task.emptyTrashFailed
+    - task.executionFailedLabel
+    - task.checkErrorAndRetry
+    - task.retryTaskBtn
+    - task.creationIdLabel
+    - task.traceIdLabel
+    - task.taskIdPrefix
+    - task.executionFailedMsg
+    - task.retrySuggestion
+    - task.retryBtn
+    - task.deletedTime
+    - task.batchDeleteResult
+
+  [coldStart] (1 个):
+    - coldStart.categoryCTA
+
+--- (b) 多余的 Key --- 无
+
+--- (c) 重复 Key --- 无
+
+--- (d) 插值变量不一致 --- 无
+
+--- (e) 翻译值为空 ---
+  > comments.skippedCount: 值为空
+
+========================================
+=== 分析语种: vi-VN ===
+========================================
+
+--- 基本统计 ---
+zh-CN 总 key 数: 1175
+vi-VN 总 key 数: 1134
+缺失 key 数: 41
+多余 key 数: 0
+重复 key 数: 0
+插值变量不一致: 0
+空值 key 数: 1
+
+--- (a) 缺失的 Key (按模块分组) ---
+
+  [material] (6 个):
+    - material.unsupportedFormat
+    - material.uploadFailed
+    - material.uploadSuccess
+    - material.confirmBatchPermanentDelete
+    - material.relevanceLabel
+    - material.selectedCount
+
+  [task] (34 个):
+    - task.listLoadFailed
+    - task.detailLoadFailed
+    - task.completedTitle
+    - task.completedNotification
+    - task.failedTitle
+    - task.executionFailed
+    - task.taskCanceled
+    - task.cancelFailed
+    - task.taskRetried
+    - task.retryFailed
+    - task.batchCancelResult
+    - task.batchCancelException
+    - task.batchRetryResult
+    - task.batchRetryException
+    - task.movedToTrash
+    - task.deleteFailed
+    - task.taskRestored
+    - task.restoreFailed
+    - task.taskPermanentlyDeleted
+    - task.permanentDeleteFailed
+    - task.batchDeleteException
+    - task.trashEmptied
+    - task.emptyTrashFailed
+    - task.executionFailedLabel
+    - task.checkErrorAndRetry
+    - task.retryTaskBtn
+    - task.creationIdLabel
+    - task.traceIdLabel
+    - task.taskIdPrefix
+    - task.executionFailedMsg
+    - task.retrySuggestion
+    - task.retryBtn
+    - task.deletedTime
+    - task.batchDeleteResult
+
+  [coldStart] (1 个):
+    - coldStart.categoryCTA
+
+--- (b) 多余的 Key --- 无
+
+--- (c) 重复 Key --- 无
+
+--- (d) 插值变量不一致 --- 无
+
+--- (e) 翻译值为空 ---
+  > comments.skippedCount: 值为空
+
+========================================
+=== 分析语种: ja-JP ===
+========================================
+
+--- 基本统计 ---
+zh-CN 总 key 数: 1175
+ja-JP 总 key 数: 1140
+缺失 key 数: 35
+多余 key 数: 0
+重复 key 数: 0
+插值变量不一致: 0
+空值 key 数: 1
+
+--- (a) 缺失的 Key (按模块分组) ---
+
+  [task] (34 个):
+    - task.listLoadFailed
+    - task.detailLoadFailed
+    - task.completedTitle
+    - task.completedNotification
+    - task.failedTitle
+    - task.executionFailed
+    - task.taskCanceled
+    - task.cancelFailed
+    - task.taskRetried
+    - task.retryFailed
+    - task.batchCancelResult
+    - task.batchCancelException
+    - task.batchRetryResult
+    - task.batchRetryException
+    - task.movedToTrash
+    - task.deleteFailed
+    - task.taskRestored
+    - task.restoreFailed
+    - task.taskPermanentlyDeleted
+    - task.permanentDeleteFailed
+    - task.batchDeleteException
+    - task.trashEmptied
+    - task.emptyTrashFailed
+    - task.executionFailedLabel
+    - task.checkErrorAndRetry
+    - task.retryTaskBtn
+    - task.creationIdLabel
+    - task.traceIdLabel
+    - task.taskIdPrefix
+    - task.executionFailedMsg
+    - task.retrySuggestion
+    - task.retryBtn
+    - task.deletedTime
+    - task.batchDeleteResult
+
+  [coldStart] (1 个):
+    - coldStart.categoryCTA
+
+--- (b) 多余的 Key --- 无
+
+--- (c) 重复 Key --- 无
+
+--- (d) 插值变量不一致 --- 无
+
+--- (e) 翻译值为空 ---
+  > comments.skippedCount: 值为空
+
+========================================
+=== 分析语种: ko-KR ===
+========================================
+
+--- 基本统计 ---
+zh-CN 总 key 数: 1175
+ko-KR 总 key 数: 1140
+缺失 key 数: 35
+多余 key 数: 0
+重复 key 数: 0
+插值变量不一致: 0
+空值 key 数: 1
+
+--- (a) 缺失的 Key (按模块分组) ---
+
+  [task] (34 个):
+    - task.listLoadFailed
+    - task.detailLoadFailed
+    - task.completedTitle
+    - task.completedNotification
+    - task.failedTitle
+    - task.executionFailed
+    - task.taskCanceled
+    - task.cancelFailed
+    - task.taskRetried
+    - task.retryFailed
+    - task.batchCancelResult
+    - task.batchCancelException
+    - task.batchRetryResult
+    - task.batchRetryException
+    - task.movedToTrash
+    - task.deleteFailed
+    - task.taskRestored
+    - task.restoreFailed
+    - task.taskPermanentlyDeleted
+    - task.permanentDeleteFailed
+    - task.batchDeleteException
+    - task.trashEmptied
+    - task.emptyTrashFailed
+    - task.executionFailedLabel
+    - task.checkErrorAndRetry
+    - task.retryTaskBtn
+    - task.creationIdLabel
+    - task.traceIdLabel
+    - task.taskIdPrefix
+    - task.executionFailedMsg
+    - task.retrySuggestion
+    - task.retryBtn
+    - task.deletedTime
+    - task.batchDeleteResult
+
+  [coldStart] (1 个):
+    - coldStart.categoryCTA
+
+--- (b) 多余的 Key --- 无
+
+--- (c) 重复 Key --- 无
+
+--- (d) 插值变量不一致 --- 无
+
+--- (e) 翻译值为空 ---
+  > comments.skippedCount: 值为空
+
+
+
+============================================
+============= 汇总统计 =====================
+============================================
+
+基准文件: zh-CN.json (1175 个 key)
+
+语种       | 总Key数 | 缺失 | 多余 | 重复 | 插值不一致 | 空值
+-----------|---------|------|------|------|----------|------
+zh-CN      |    1175 |    — |    — |    — |        — |    —
+en-US      |    1140 |   35 |    0 |    0 |        0 |    1
+id-ID      |    1140 |   35 |    0 |    0 |        0 |    1
+th-TH      |    1140 |   35 |    0 |    0 |        0 |    1
+vi-VN      |    1134 |   41 |    0 |    0 |        0 |    1
+ja-JP      |    1140 |   35 |    0 |    0 |        0 |    1
+ko-KR      |    1140 |   35 |    0 |    0 |        0 |    1
+
+=== 分析完成 ===

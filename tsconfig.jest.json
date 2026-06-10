@@ -1,0 +1,14 @@
+{
+  "extends": "./tsconfig.base.json",
+  "compilerOptions": {
+    "strict": false,
+    "noEmit": true,
+    "isolatedModules": true,
+    "types": ["node", "jest"],
+    "paths": {
+      "@nestjs/prisma": ["packages/nestjs-prisma-shim/src/index.ts"],
+      "@tikstream/shared-types": ["shared/index.ts"]
+    }
+  },
+  "include": ["tests/**/*.ts", "apps/**/*.ts", "workers/**/*.ts", "shared/**/*.ts", "packages/**/*.ts"]
+}

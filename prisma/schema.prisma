@@ -1,0 +1,895 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum MaterialType {
+  IMAGE
+  VIDEO
+  PRODUCT_MAIN_IMAGE
+}
+
+enum MaterialSourceType {
+  UPLOAD
+  REFERENCE
+  GENERATED
+}
+
+enum MaterialStatus {
+  PENDING
+  PROCESSING
+  COMPLETED
+  FAILED
+}
+
+enum MaterialSliceStatus {
+  PENDING
+  CAPTIONING
+  EMBEDDING
+  COMPLETED
+  FAILED
+}
+
+enum ScriptGenerationMode {
+  PROMPT_DRIVEN
+  VIRAL_REWRITE
+  TEMPLATE_DRIVEN
+  BATCH
+  COMPOSED
+  HYBRID
+}
+
+enum AspectRatio {
+  NINE_SIXTEEN   @map("9:16")
+  SIXTEEN_NINE   @map("16:9")
+}
+
+enum CameraMovement {
+  Static
+  Dolly_In_Fast
+  Dolly_Out
+  Pan_Left
+  Tilt_Up
+}
+
+enum TransitionType {
+  None
+  Fade_In
+  Dissolve
+  Wipe
+}
+
+enum ComplianceStatus {
+  PENDING
+  PASSED
+  REJECTED
+}
+
+enum CreationStatus {
+  PENDING
+  PROCESSING
+  FINISHED
+  FAILED
+  CANCELED
+}
+
+enum CreationStage {
+  QUEUE_ALLOCATION
+  ASSET_MATCHING
+  AI_VIDEO_GENERATING
+  TTS_GENERATING
+  FFMPEG_STITCHING
+  ORIGINALITY_CHECK
+  ORIGINALITY_OPTIMIZE
+  LOUDNORM_COMPLIANCE
+  FINISHED
+  FAILED
+}
+
+enum ShotRenderStatus {
+  PENDING
+  PROCESSING
+  FINISHED
+  FAILED
+}
+
+enum EngineMode {
+  SCRIPT_DRIVEN
+  IMAGE_DRIVEN
+  PROMPT_DRIVEN
+}
+
+enum TemplateStatus {
+  ACTIVE
+  INACTIVE
+  ARCHIVED
+}
+
+enum FactorCategory {
+  NARRATIVE   // 叙事层因子：开场/退场/画面重点/旁白风格等
+  PARAMETER   // 参数层因子：optimal_shot_count/camera_patterns 等
+  INSTRUCTION // 指令层因子：具体的、范例式的创作指令
+}
+
+enum ConstraintRuleType {
+  HARD  // 硬约束：必须遵守（合规性相关）
+  SOFT  // 软约束：建议遵守（风格指导）
+}
+
+model Product {
+  id              String    @id @default(uuid()) @db.Uuid
+  title           String    @db.VarChar(200)
+  skuCode         String    @unique @map("sku_code") @db.VarChar(100)
+  category        String    @db.VarChar(100)
+  sellingPoints   Json      @default("[]") @map("selling_points")
+  targetAudience  String?   @map("target_audience") @db.VarChar(200)
+  scenarioTags    Json      @default("[]") @map("scenario_tags")
+  textFeatures    Json      @default("{}") @map("text_features")
+  coverImageUrl   String?   @map("cover_image_url") @db.VarChar(2000)
+  color           String?   @map("color") @db.VarChar(50)
+  materialType    String?   @map("material_type") @db.VarChar(100)
+  sizeDesc        String?   @map("size_desc") @db.VarChar(100)
+  usageScenario   String?   @map("usage_scenario") @db.VarChar(200)
+  brand           String?   @map("brand") @db.VarChar(100)
+  richFeatures    Json      @default("{}") @map("rich_features")
+  createdAt       DateTime  @default(now()) @map("created_at")
+  updatedAt       DateTime  @updatedAt @map("updated_at")
+
+  materials            Material[]
+  scripts              Script[]
+  creations            Creation[]
+  templates            Template[]
+  viralVideoAnalyses   ViralVideoAnalysis[]
+  trendSnapshots       TrendSnapshot[]
+  comments             Comment[]
+  optimizations        ContentOptimization[]
+
+  @@index([title])
+  @@index([category])
+  @@index([createdAt])
+  @@map("products")
+}
+
+model Material {
+  id              String             @id @default(uuid()) @db.Uuid
+  productId       String             @map("product_id") @db.Uuid
+  fileName        String             @map("file_name") @db.VarChar(255)
+  type            MaterialType
+  sourceType      MaterialSourceType @default(UPLOAD) @map("source_type")
+  originUrl       String             @map("origin_url") @db.VarChar(2000)
+  thumbnailUrl    String?            @map("thumbnail_url") @db.VarChar(2000)
+  fileSizeBytes   BigInt             @map("file_size_bytes")
+  durationSeconds Decimal?           @map("duration_seconds") @db.Decimal(6, 2)
+  width           Int?
+  height          Int?
+  mimeType        String?            @map("mime_type") @db.VarChar(100)
+  status          MaterialStatus     @default(PENDING)
+  slicesCount     Int                @default(0) @map("slices_count")
+  remark          String?            @db.Text
+  summary         String?            @map("summary") @db.Text
+  visionAnalysisJson Json?          @map("vision_analysis_json")
+  originalFormat  String?            @map("original_format") @db.VarChar(20)
+  copyrightStatus String             @default("UNCHECKED") @map("copyright_status") @db.VarChar(20)
+  deletedAt       DateTime?          @map("deleted_at")
+  referencedMaterialId String?       @map("referenced_material_id") @db.Uuid
+  referenceCategory    String?       @map("reference_category") @db.VarChar(50)
+  createdAt       DateTime           @default(now()) @map("created_at")
+  updatedAt       DateTime           @updatedAt @map("updated_at")
+
+  product             Product          @relation(fields: [productId], references: [id])
+  slices              MaterialSlice[]
+  referencedMaterial  Material?        @relation("MaterialReference", fields: [referencedMaterialId], references: [id])
+  referencingMaterials Material[]      @relation("MaterialReference")
+
+  @@index([productId])
+  @@index([type])
+  @@index([status])
+  @@index([sourceType])
+  @@index([durationSeconds])
+  @@index([createdAt])
+  @@index([deletedAt])
+  @@index([referencedMaterialId])
+  @@map("materials")
+}
+
+model MaterialSlice {
+  id                    String              @id @default(uuid()) @db.Uuid
+  materialId            String              @map("material_id") @db.Uuid
+  sliceId               String              @unique @map("slice_id") @db.VarChar(64)
+  startTime             Decimal             @map("start_time") @db.Decimal(6, 2)
+  endTime               Decimal             @map("end_time") @db.Decimal(6, 2)
+  duration              Decimal             @map("duration") @db.Decimal(5, 2)
+  denseCaption          String?             @map("dense_caption") @db.Text
+  tags                  Json                @default("[]")
+  productDimensionTags  Json                @default("[]") @map("product_dimension_tags")
+  videoDimensionTags    Json                @default("[]") @map("video_dimension_tags")
+  sliceDimensionTags    Json                @default("[]") @map("slice_dimension_tags")
+  streamUrl             String?             @map("stream_url") @db.VarChar(2000)
+  keyFrameUrl           String?             @map("key_frame_url") @db.VarChar(2000)
+  embeddingVersion      String?             @map("embedding_version") @db.VarChar(50)
+  sfxUrl                String?             @map("sfx_url") @db.VarChar(2000)
+  cropRegionX           Int?                @map("crop_region_x")
+  cropRegionY           Int?                @map("crop_region_y")
+  cropRegionW           Int?                @map("crop_region_w")
+  cropRegionH           Int?                @map("crop_region_h")
+  status                MaterialSliceStatus @default(PENDING)
+  usageCount            Int                 @default(0) @map("usage_count")
+  lastUsedAt            DateTime?           @map("last_used_at")
+  deletedAt             DateTime?           @map("deleted_at")
+  createdAt             DateTime            @default(now()) @map("created_at")
+  updatedAt             DateTime            @updatedAt @map("updated_at")
+
+  material Material @relation(fields: [materialId], references: [id])
+
+  @@index([materialId])
+  @@index([duration])
+  @@index([status])
+  @@index([createdAt])
+  @@index([deletedAt])
+  @@index([materialId, status, deletedAt])
+  @@map("material_slices")
+}
+
+model Script {
+  id               String               @id @default(uuid()) @db.Uuid
+  productId        String               @map("product_id") @db.Uuid
+  title            String?              @db.VarChar(200)
+  language         String?              @default("zh-CN") @db.VarChar(20)
+  targetAudience   String?              @map("target_audience") @db.VarChar(200)
+  videoDuration    Decimal              @map("video_duration") @db.Decimal(5, 2)
+  aspectRatio      AspectRatio
+  styleVibe        String               @map("style_vibe") @db.VarChar(100)
+  generationMode   ScriptGenerationMode @map("generation_mode")
+  templateId       String?              @map("template_id") @db.Uuid
+  viralVideoId     String?              @map("viral_video_id") @db.Uuid
+  constraintList   Json                 @default("[]") @map("constraint_list")
+  preferences      Json?                @map("preferences")
+  rawJson          Json                 @map("raw_json")
+  predictedCtr       Float?             @map("predicted_ctr")
+  predictedCvr       Float?             @map("predicted_cvr")
+  predictedRetention Float?             @map("predicted_retention")
+  predictedAt        DateTime?          @map("predicted_at") @db.Timestamptz()
+  predictionModel    String?            @map("prediction_model") @db.VarChar(50)
+  deletedAt        DateTime?            @map("deleted_at")
+  createdAt        DateTime             @default(now()) @map("created_at")
+  updatedAt        DateTime             @updatedAt @map("updated_at")
+
+  product        Product?              @relation(fields: [productId], references: [id])
+  template       Template?             @relation(fields: [templateId], references: [id])
+  viralVideo     ViralVideoAnalysis?   @relation(fields: [viralVideoId], references: [id])
+  shots          ScriptShot[]
+  versions       ScriptVersion[]
+  creations      Creation[]
+  subtitleTranslations SubtitleTranslation[]
+
+  @@index([productId])
+  @@index([title])
+  @@index([generationMode])
+  @@index([createdAt])
+  @@index([deletedAt])
+  @@map("scripts")
+}
+
+model ScriptShot {
+  id                    String           @id @default(uuid()) @db.Uuid
+  scriptId              String           @map("script_id") @db.Uuid
+  shotId                String?          @map("shot_id") @db.VarChar(64)
+  shotIndex             Int
+  duration              Decimal          @db.Decimal(5, 2)
+  sceneDescriptionQuery String           @map("scene_description_query") @db.Text
+  visualDescription     String           @map("visual_description") @db.Text
+  cameraMovement        CameraMovement
+  transitionType        TransitionType   @map("transition_type")
+  voiceoverText         String           @map("voiceover_text") @db.Text
+  subtitleText          String           @map("subtitle_text") @db.Text
+  safeZoneBoundingBox   Json             @map("safe_zone_bounding_box")
+  selectedSliceId       String?          @map("selected_slice_id") @db.VarChar(64)
+  renderPrompt          String?          @map("render_prompt") @db.Text
+  localFactorPatch      Json             @default("{}") @map("local_factor_patch")
+  bgmSegment           Json?            @map("bgm_segment")
+  complianceStatus      ComplianceStatus @default(PENDING) @map("compliance_status")
+  deletedAt             DateTime?        @map("deleted_at")
+  createdAt             DateTime         @default(now()) @map("created_at")
+  updatedAt             DateTime         @updatedAt @map("updated_at")
+
+  script       Script        @relation(fields: [scriptId], references: [id])
+  shotRenders  ShotRender[]
+
+  @@unique([scriptId, shotIndex])
+  @@index([scriptId])
+  @@index([selectedSliceId])
+  @@index([complianceStatus])
+  @@index([createdAt])
+  @@index([deletedAt])
+  @@map("script_shots")
+}
+
+model Creation {
+  id               String        @id @default(uuid()) @db.Uuid
+  productId        String        @map("product_id") @db.Uuid
+  scriptId         String        @map("script_id") @db.Uuid
+  taskId           String        @unique @map("task_id") @db.VarChar(64)
+  engineMode       EngineMode    @default(SCRIPT_DRIVEN) @map("engine_mode")
+  targetResolution String        @default("1080x1920") @map("target_resolution") @db.VarChar(20)
+  exportFormat     String        @default("MP4") @map("export_format") @db.VarChar(10)
+  status           CreationStatus @default(PENDING)
+  progress         Int           @default(0)
+  currentStage     CreationStage @default(QUEUE_ALLOCATION) @map("current_stage")
+  videoUrl         String?       @map("video_url") @db.VarChar(2000)
+  fileSizeBytes    BigInt?       @map("file_size_bytes")
+  traceId          String?       @map("trace_id") @db.VarChar(64)
+  preferAiVideo    Boolean       @default(false) @map("prefer_ai_video")
+  errorCode        String?       @map("error_code") @db.VarChar(50)
+  errorMessage     String?       @map("error_message") @db.Text
+  watermarkConfig  Json?         @map("watermark_config")
+  startedAt        DateTime?     @map("started_at")
+  finishedAt       DateTime?     @map("finished_at")
+  deletedAt        DateTime?     @map("deleted_at") @db.Timestamptz()
+  createdAt        DateTime      @default(now()) @map("created_at")
+  updatedAt        DateTime      @updatedAt @map("updated_at")
+
+  product      Product       @relation(fields: [productId], references: [id])
+  script       Script        @relation(fields: [scriptId], references: [id])
+  shotRenders  ShotRender[]
+  originalityChecks OriginalityCheck[]
+
+  @@index([productId])
+  @@index([scriptId])
+  @@index([status])
+  @@index([currentStage])
+  @@index([traceId])
+  @@index([startedAt])
+  @@index([finishedAt])
+  @@index([createdAt])
+  @@index([deletedAt])
+  @@index([status, deletedAt])
+  @@map("creations")
+}
+
+model ShotRender {
+  id               String           @id @default(uuid()) @db.Uuid
+  creationId       String           @map("creation_id") @db.Uuid
+  scriptShotId     String           @map("script_shot_id") @db.Uuid
+  shotId           String?          @map("shot_id") @db.VarChar(64)
+  shotIndex        Int
+  cacheHash        String?          @map("cache_hash") @db.VarChar(64)
+  sliceId          String?          @map("slice_id") @db.VarChar(64)
+  renderPath       String?          @map("render_path") @db.VarChar(2000)
+  renderDurationMs Int?             @map("render_duration_ms")
+  retryCount       Int              @default(0) @map("retry_count")
+  source           String?          @map("source") @db.VarChar(32)
+  seedancePrompt   String?          @map("seedance_prompt") @db.Text
+  status           ShotRenderStatus @default(PENDING)
+  errorMessage     String?          @map("error_message") @db.Text
+  createdAt        DateTime         @default(now()) @map("created_at")
+  updatedAt        DateTime         @updatedAt @map("updated_at")
+
+  creation   Creation   @relation(fields: [creationId], references: [id])
+  scriptShot ScriptShot @relation(fields: [scriptShotId], references: [id])
+
+  @@index([creationId])
+  @@index([scriptShotId])
+  @@index([cacheHash])
+  @@index([sliceId])
+  @@index([status])
+  @@index([createdAt])
+  @@map("shot_renders")
+}
+
+model Template {
+  id               String         @id @default(uuid()) @db.Uuid
+  productId        String?        @map("product_id") @db.Uuid
+  name             String         @db.VarChar(120)
+  category         String         @db.VarChar(100)
+  strategySummary  String         @map("strategy_summary") @db.Text
+  factorJson       Json           @map("factor_json")
+  schemaJson       Json?          @map("schema_json")
+  source           String         @default("MANUAL") @map("source") @db.VarChar(20)
+  status           TemplateStatus @default(ACTIVE)
+  isPublished      Boolean        @default(false) @map("is_published")
+  createdAt        DateTime       @default(now()) @map("created_at")
+  updatedAt        DateTime       @updatedAt @map("updated_at")
+
+  product              Product?              @relation(fields: [productId], references: [id])
+  scripts              Script[]
+  templateViralVideos  TemplateViralVideo[]
+  templateFactors      TemplateFactor[]
+  templateStrategies   TemplateStrategy[]
+  templateConstraints  TemplateConstraint[]
+
+  @@index([productId])
+  @@index([name])
+  @@index([category])
+  @@index([status])
+  @@index([createdAt])
+  @@map("templates")
+}
+
+model TemplateViralVideo {
+  templateId  String   @map("template_id") @db.Uuid
+  analysisId  String   @map("analysis_id") @db.Uuid
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  template  Template            @relation(fields: [templateId], references: [id], onDelete: Cascade)
+  analysis  ViralVideoAnalysis  @relation(fields: [analysisId], references: [id], onDelete: Cascade)
+
+  @@id([templateId, analysisId])
+  @@index([analysisId])
+  @@map("template_viral_videos")
+}
+
+model Factor {
+  id           String         @id @default(uuid()) @db.Uuid
+  key          String         @unique @db.VarChar(80)
+  name         String         @db.VarChar(120)
+  category     FactorCategory @default(PARAMETER)
+  description  String?        @db.Text
+  defaultValue Json?          @map("default_value")
+  valueSchema  Json?          @map("value_schema")
+  sortOrder    Int            @default(0) @map("sort_order")
+  isBuiltin    Boolean        @default(false) @map("is_builtin")
+  createdAt    DateTime       @default(now()) @map("created_at")
+  updatedAt    DateTime       @updatedAt @map("updated_at")
+
+  templateFactors TemplateFactor[]
+
+  @@index([category])
+  @@index([key])
+  @@index([sortOrder])
+  @@map("factors")
+}
+
+model TemplateFactor {
+  templateId String @map("template_id") @db.Uuid
+  factorId   String @map("factor_id") @db.Uuid
+  value      Json   @map("value")
+
+  template Template @relation(fields: [templateId], references: [id], onDelete: Cascade)
+  factor   Factor   @relation(fields: [factorId], references: [id], onDelete: Cascade)
+
+  @@id([templateId, factorId])
+  @@index([factorId])
+  @@map("template_factors")
+}
+
+model Strategy {
+  id          String   @id @default(uuid()) @db.Uuid
+  key         String   @unique @db.VarChar(80)
+  name        String   @db.VarChar(120)
+  description String?  @db.Text
+  category    String   @db.VarChar(60)
+  summary     String   @db.Text
+  summaryJson Json?    @map("summary_json")
+  isBuiltin   Boolean  @default(false) @map("is_builtin")
+  sortOrder   Int      @default(0) @map("sort_order")
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  templateStrategies  TemplateStrategy[]
+
+  @@index([key])
+  @@index([category])
+  @@index([sortOrder])
+  @@map("strategies")
+}
+
+model Constraint {
+  id          String            @id @default(uuid()) @db.Uuid
+  key         String            @unique @db.VarChar(80)
+  name        String            @db.VarChar(120)
+  description String?           @db.Text
+  category    String            @db.VarChar(60)
+  ruleType    ConstraintRuleType @map("rule_type")
+  ruleConfig  Json              @map("rule_config")
+  isBuiltin   Boolean           @default(false) @map("is_builtin")
+  sortOrder   Int               @default(0) @map("sort_order")
+  createdAt   DateTime          @default(now()) @map("created_at")
+  updatedAt   DateTime          @updatedAt @map("updated_at")
+
+  templateConstraints TemplateConstraint[]
+
+  @@index([key])
+  @@index([category])
+  @@index([ruleType])
+  @@index([sortOrder])
+  @@map("constraints")
+}
+
+model TemplateStrategy {
+  templateId String @map("template_id") @db.Uuid
+  strategyId String @map("strategy_id") @db.Uuid
+
+  template Template @relation(fields: [templateId], references: [id], onDelete: Cascade)
+  strategy Strategy @relation(fields: [strategyId], references: [id], onDelete: Cascade)
+
+  @@id([templateId, strategyId])
+  @@index([strategyId])
+  @@map("template_strategies")
+}
+
+model TemplateConstraint {
+  templateId   String @map("template_id") @db.Uuid
+  constraintId String @map("constraint_id") @db.Uuid
+
+  template   Template   @relation(fields: [templateId], references: [id], onDelete: Cascade)
+  constraint Constraint @relation(fields: [constraintId], references: [id], onDelete: Cascade)
+
+  @@id([templateId, constraintId])
+  @@index([constraintId])
+  @@map("template_constraints")
+}
+
+model ViralVideoAnalysis {
+  id                  String   @id @default(uuid()) @db.Uuid
+  productId           String?  @map("product_id") @db.Uuid
+  sourcePlatform      String   @map("source_platform") @db.VarChar(50)
+  sourceUrl           String   @map("source_url") @db.VarChar(2000)
+  externalVideoId     String   @map("external_video_id") @db.VarChar(100)
+  title               String?  @db.VarChar(255)
+  hookType            String?  @map("hook_type") @db.VarChar(100)
+  strategyJson        Json     @map("strategy_json")
+  factorJson          Json     @map("factor_json")
+  reportJson          Json     @map("report_json")
+  sellingPoints       Json?    @map("selling_points")
+  shotsDecomposition  Json?    @map("shots_decomposition")
+  declaredPublicSource Boolean @default(true) @map("declared_public_source")
+  createdAt           DateTime @default(now()) @map("created_at")
+  updatedAt           DateTime @updatedAt @map("updated_at")
+
+  product Product? @relation(fields: [productId], references: [id])
+  scripts Script[]
+  templateViralVideos TemplateViralVideo[]
+
+  @@index([productId])
+  @@index([sourcePlatform])
+  @@index([externalVideoId])
+  @@index([createdAt])
+  @@map("viral_video_analyses")
+}
+
+// =============================================================================
+// 用户搜索日志 (需求3: 智能召回基础设施 — Phase 1)
+// =============================================================================
+model UserSearchLog {
+  id        String   @id @default(uuid()) @db.Uuid
+  query     String   @db.VarChar(500)
+  userId    String?  @map("user_id") @db.VarChar(100)
+  source    String   @default("material_search") @map("source") @db.VarChar(50)
+  hitCount  Int      @default(0) @map("hit_count")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@index([createdAt])
+  @@index([query])
+  @@map("user_search_logs")
+}
+
+// =============================================================================
+// 剧本历史版本 (Phase 2)
+// =============================================================================
+model ScriptVersion {
+  id            String   @id @default(uuid()) @db.Uuid
+  scriptId      String   @map("script_id") @db.Uuid
+  versionNumber Int      @map("version_number")
+  snapshot      Json     @map("snapshot") @db.JsonB
+  triggerAction String   @map("trigger_action") @db.VarChar(50)
+  createdAt     DateTime @default(now()) @map("created_at") @db.Timestamptz()
+
+  script Script @relation(fields: [scriptId], references: [id], onDelete: Cascade)
+
+  @@unique([scriptId, versionNumber])
+  @@index([scriptId, createdAt(sort: Desc)])
+  @@map("script_versions")
+}
+
+// =============================================================================
+// 创作模板 (Phase 2)
+// =============================================================================
+model CreationTemplate {
+  id         String   @id @default(uuid()) @db.Uuid
+  name       String   @db.VarChar(200)
+  productId  String?  @map("product_id") @db.Uuid
+  scriptId   String   @map("script_id") @db.Uuid
+  presetJson Json     @map("preset_json") @db.JsonB
+  createdAt  DateTime @default(now()) @map("created_at") @db.Timestamptz()
+
+  @@index([productId])
+  @@index([scriptId])
+  @@map("creation_templates")
+}
+
+// =============================================================================
+// 爆款 DNA 模式 (Phase 3)
+// =============================================================================
+model DnaPattern {
+  id              String   @id @default(uuid()) @db.Uuid
+  productCategory String   @map("product_category") @db.VarChar(50)
+  market          String   @default("GLOBAL") @db.VarChar(20)
+  dnaJson         Json     @map("dna_json") @db.JsonB
+  sampleCount     Int      @map("sample_count") @default(0)
+  confidence      Float    @default(0)
+  createdAt       DateTime @default(now()) @map("created_at") @db.Timestamptz()
+
+  @@index([productCategory])
+  @@index([confidence])
+  @@map("dna_patterns")
+}
+
+// =============================================================================
+// 自动 A/B 会话 (Phase 3)
+// =============================================================================
+model AutoAbSession {
+  id                String    @id @default(uuid()) @db.Uuid
+  baseScriptId      String    @map("base_script_id") @db.Uuid
+  status            String    @default("PENDING") @db.VarChar(20)
+  variantConfigs    Json      @map("variant_configs") @db.JsonB
+  variantScriptIds  Json?     @map("variant_script_ids") @db.JsonB
+  variantCreationIds Json?    @map("variant_creation_ids") @db.JsonB
+  resultJson        Json?     @map("result_json") @db.JsonB
+  progress          Float     @default(0)
+  createdAt         DateTime  @default(now()) @map("created_at") @db.Timestamptz()
+  completedAt       DateTime? @map("completed_at") @db.Timestamptz()
+
+  @@index([baseScriptId])
+  @@index([status])
+  @@map("auto_ab_sessions")
+}
+
+// =============================================================================
+// Prompt 模板管理 (Phase 5)
+// =============================================================================
+model PromptTemplate {
+  id          String   @id @default(uuid()) @db.Uuid
+  name        String   @db.VarChar(100)
+  description String?  @db.VarChar(500)
+  isActive    Boolean  @default(true) @map("is_active")
+  createdAt   DateTime @default(now()) @map("created_at") @db.Timestamptz()
+  updatedAt   DateTime @updatedAt @map("updated_at") @db.Timestamptz()
+
+  versions PromptTemplateVersion[]
+
+  @@map("prompt_templates")
+}
+
+model PromptTemplateVersion {
+  id             String   @id @default(uuid()) @db.Uuid
+  templateId     String   @map("template_id") @db.Uuid
+  versionNumber  Int      @map("version_number")
+  systemPrompt   String   @map("system_prompt") @db.Text
+  userPrompt     String   @map("user_prompt") @db.Text
+  createdAt      DateTime @default(now()) @map("created_at") @db.Timestamptz()
+
+  template PromptTemplate @relation(fields: [templateId], references: [id], onDelete: Cascade)
+
+  @@unique([templateId, versionNumber])
+  @@map("prompt_template_versions")
+}
+
+// =============================================================================
+// 爆款订阅 (Phase 5)
+// =============================================================================
+model ViralSubscription {
+  id             String    @id @default(uuid()) @db.Uuid
+  platform       String    @db.VarChar(20)
+  accountUrl     String    @map("account_url") @db.VarChar(500)
+  accountName    String?   @map("account_name") @db.VarChar(200)
+  isActive       Boolean   @default(true) @map("is_active")
+  lastCheckedAt  DateTime? @map("last_checked_at") @db.Timestamptz()
+  createdAt      DateTime  @default(now()) @map("created_at") @db.Timestamptz()
+  updatedAt      DateTime  @updatedAt @map("updated_at") @db.Timestamptz()
+
+  @@map("viral_subscriptions")
+}
+
+// =============================================================================
+// 实时趋势追踪 (Phase 6)
+// =============================================================================
+model TrendSnapshot {
+  id                  String   @id @default(uuid()) @db.Uuid
+  productId           String   @map("product_id") @db.Uuid
+  trendsJson          Json     @map("trends_json")
+  recommendationsJson Json     @map("recommendations_json")
+  generatedBy         String   @map("generated_by") @db.VarChar(50) @default("AI")
+  ttlSeconds          Int      @map("ttl_seconds") @default(3600)
+  expiresAt           DateTime @map("expires_at") @db.Timestamptz()
+  createdAt           DateTime @default(now()) @map("created_at") @db.Timestamptz()
+  updatedAt           DateTime @updatedAt @map("updated_at") @db.Timestamptz()
+
+  product Product? @relation(fields: [productId], references: [id])
+
+  @@index([productId])
+  @@index([expiresAt])
+  @@index([createdAt])
+  @@map("trend_snapshots")
+}
+
+// =============================================================================
+// 字幕翻译与本地化
+// =============================================================================
+model SubtitleTranslation {
+  id             String   @id @default(uuid()) @db.Uuid
+  scriptId       String   @map("script_id") @db.Uuid
+  shotIndex      Int      @map("shot_index")
+  sourceLang     String   @default("zh-CN") @map("source_lang") @db.VarChar(10)
+  sourceText     String   @map("source_text") @db.Text
+  targetLang     String   @map("target_lang") @db.VarChar(10)
+  translatedText String   @map("translated_text") @db.Text
+  culturalNotes  Json?    @map("cultural_notes")
+  createdAt      DateTime @default(now()) @map("created_at") @db.Timestamptz()
+  updatedAt      DateTime @updatedAt @map("updated_at") @db.Timestamptz()
+
+  script Script @relation(fields: [scriptId], references: [id], onDelete: Cascade)
+
+  @@unique([scriptId, shotIndex, targetLang])
+  @@index([scriptId])
+  @@map("subtitle_translations")
+}
+
+// =============================================================================
+// 评论情感分析与二次创作 (Phase 7) — 用户反馈闭环
+// =============================================================================
+model Comment {
+  id            String   @id @default(uuid()) @db.Uuid
+  productId     String   @map("product_id") @db.Uuid
+  product       Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  platform      String   @default("tiktok") @db.VarChar(20)
+  externalId    String   @map("external_id") @db.VarChar(255)
+  videoUrl      String?  @map("video_url") @db.VarChar(500)
+  authorName    String?  @map("author_name") @db.VarChar(200)
+  content       String   @db.Text
+  likeCount     Int      @default(0) @map("like_count")
+  replyCount    Int      @default(0) @map("reply_count")
+  commentedAt   DateTime? @map("commented_at") @db.Timestamptz()
+
+  analysis      CommentAnalysis?
+
+  createdAt     DateTime @default(now()) @map("created_at") @db.Timestamptz()
+  updatedAt     DateTime @updatedAt @map("updated_at") @db.Timestamptz()
+
+  @@unique([platform, externalId])
+  @@index([productId])
+  @@index([commentedAt])
+  @@map("comments")
+}
+
+model CommentAnalysis {
+  id               String   @id @default(uuid()) @db.Uuid
+  commentId        String   @unique @map("comment_id") @db.Uuid
+  comment          Comment  @relation(fields: [commentId], references: [id], onDelete: Cascade)
+
+  sentiment        String   @db.VarChar(20)               // positive | neutral | negative
+  keyTopics        Json     @default("[]") @map("key_topics")
+  painPoints       Json     @default("[]") @map("pain_points")
+  featureRequests  Json     @default("[]") @map("feature_requests")
+  purchasingIntent Float    @default(0) @map("purchasing_intent")
+
+  rawAnalysis      Json?    @map("raw_analysis")
+  confidence       Float    @default(0)
+  analyzedAt       DateTime @default(now()) @map("analyzed_at") @db.Timestamptz()
+  modelUsed        String?  @map("model_used") @db.VarChar(100)
+
+  @@index([sentiment])
+  @@map("comment_analyses")
+}
+
+model ContentOptimization {
+  id                String   @id @default(uuid()) @db.Uuid
+  productId         String   @map("product_id") @db.Uuid
+  product           Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  trigger           String   @db.VarChar(50)               // negative_sentiment | pain_point | feature_request
+  sourceAnalysisId  String?  @map("source_analysis_id") @db.Uuid
+  currentScriptId   String?  @map("current_script_id") @db.Uuid
+  optimizedScriptId String?  @map("optimized_script_id") @db.Uuid
+
+  triggerDetail     Json     @map("trigger_detail")
+  suggestion        String   @db.Text
+  autoApply         Boolean  @default(false) @map("auto_apply")
+  status            String   @default("pending") @db.VarChar(20) // pending | applied | rejected | rolled_back
+
+  appliedAt         DateTime? @map("applied_at") @db.Timestamptz()
+  appliedBy         String?   @map("applied_by") @db.VarChar(50)
+  effectMetrics     Json?     @map("effect_metrics")
+
+  createdAt         DateTime  @default(now()) @map("created_at") @db.Timestamptz()
+  updatedAt         DateTime  @updatedAt @map("updated_at") @db.Timestamptz()
+
+  @@index([productId])
+  @@index([status])
+  @@index([trigger])
+  @@map("content_optimizations")
+}
+
+// =============================================================================
+// 原创度检测记录 (视频去重)
+// =============================================================================
+enum OriginalityStatus {
+  PENDING
+  PASSED
+  DUPLICATE_DETECTED
+  OPTIMIZED
+  FAILED
+}
+
+model OriginalityCheck {
+  id                      String            @id @default(uuid()) @db.Uuid
+  creationId              String            @map("creation_id") @db.Uuid
+  scoreBefore             Float             @map("score_before")
+  scoreAfter              Float?            @map("score_after")
+  similarVideos           Json              @default("[]") @map("similar_videos")
+  duplicateSections       Json              @default("[]") @map("duplicate_sections")
+  optimizationSuggestions Json              @default("[]") @map("optimization_suggestions")
+  status                  OriginalityStatus @default(PENDING)
+  remark                  String?           @db.Text
+  createdAt               DateTime          @default(now()) @map("created_at") @db.Timestamptz()
+  updatedAt               DateTime          @updatedAt @map("updated_at") @db.Timestamptz()
+
+  creation Creation @relation(fields: [creationId], references: [id], onDelete: Cascade)
+
+  @@index([creationId])
+  @@index([status])
+  @@index([createdAt(sort: Desc)])
+  @@map("originality_checks")
+}
+
+// ============================================================================
+// AutoCut — 语音驱动智能剪辑 (独立于现有 MaterialSlice 体系)
+// ============================================================================
+model AutocutJob {
+  id            String   @id @default(uuid()) @db.Uuid
+  materialId    String   @map("material_id") @db.Uuid
+  materialName  String?  @map("material_name") @db.VarChar(255)
+  status        String   @default("PENDING") @db.VarChar(30)
+  stage         String?  @db.VarChar(50)
+  progress      Int      @default(0)
+
+  segments      Json?
+
+  srtContent    String?  @map("srt_content") @db.Text
+  language      String?  @db.VarChar(20)
+  videoDuration Float?   @map("video_duration")
+
+  outputUrl     String?  @map("output_url") @db.VarChar(2000)
+  outputDuration Float?  @map("output_duration")
+
+  error         String?  @db.Text
+  createdAt     DateTime @default(now()) @map("created_at") @db.Timestamptz()
+  updatedAt     DateTime @updatedAt @map("updated_at") @db.Timestamptz()
+
+  @@index([materialId])
+  @@index([status])
+  @@index([createdAt])
+  @@map("autocut_jobs")
+}
+
+// ============================================================================
+// 投放时段分析数据 (PostingTime Analytics) — 历史投放效果记录
+// ============================================================================
+model PostingTimeAnalytics {
+  id             String   @id @default(uuid()) @db.Uuid
+  productId      String   @map("product_id") @db.Uuid
+  platform       String   @db.VarChar(30)
+  contentType    String   @map("content_type") @db.VarChar(30)
+  dayOfWeek      String   @map("day_of_week") @db.VarChar(10)
+  hourSlot       String   @map("hour_slot") @db.VarChar(5)
+
+  engagementRate   Float  @map("engagement_rate")
+  ctr              Float
+  completionRate   Float  @map("completion_rate")
+  conversionRate   Float  @map("conversion_rate")
+  avgWatchTime     Float  @map("avg_watch_time")
+  impressions      Int
+  videoCount       Int    @map("video_count")
+
+  createdAt     DateTime @default(now()) @map("created_at") @db.Timestamptz()
+  updatedAt     DateTime @updatedAt @map("updated_at") @db.Timestamptz()
+
+  @@index([productId])
+  @@index([platform, contentType])
+  @@index([productId, platform, contentType, dayOfWeek, hourSlot])
+  @@map("posting_time_analytics")
+}

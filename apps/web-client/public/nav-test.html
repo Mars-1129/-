@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <title>导航测试</title>
+  <style>
+    body { font-family: system-ui; padding: 40px; background: #0f172a; color: #e2e8f0; }
+    .test { margin: 20px 0; padding: 20px; border-radius: 12px; border: 1px solid #334155; }
+    h2 { color: #38bdf8; }
+    button, a.btn { display: inline-block; margin: 8px 4px; padding: 10px 20px; border-radius: 8px; 
+      background: #059669; color: white; border: none; cursor: pointer; text-decoration: none; font-size: 14px; }
+    button:hover, a.btn:hover { background: #047857; }
+    .error { color: #f87171; }
+    .result { padding: 10px; margin-top: 10px; border-radius: 8px; background: #1e293b; }
+    .pass { color: #4ade80; }
+    .fail { color: #f87171; }
+  </style>
+</head>
+<body>
+  <h1>🔬 导航功能测试</h1>
+
+  <!-- Test 1: Plain anchor tag -->
+  <div class="test">
+    <h2>Test 1: 原生 &lt;a&gt; 标签跳转</h2>
+    <p>这个链接没有任何 JavaScript，纯粹是 HTML 超链接</p>
+    <a href="/scripts?mode=template&templateId=test-123" class="btn">跳转到 /scripts?mode=template&templateId=test-123</a>
+    <p class="result">✅ 如果点击后 URL 变化，说明浏览器基础导航功能正常</p>
+  </div>
+
+  <!-- Test 2: window.location.href via button -->
+  <div class="test">
+    <h2>Test 2: window.location.href 按钮</h2>
+    <p>点击按钮触发 JavaScript <code>window.location.href = '...'</code></p>
+    <button onclick="window.location.href='/scripts?mode=template&templateId=test-456'">跳转到 /scripts?mode=template&templateId=test-456</button>
+    <p class="result">✅ 如果点击后 URL 变化，说明 <code>window.location.href</code> 功能正常</p>
+  </div>
+
+  <!-- Test 3: API call then navigate -->
+  <div class="test">
+    <h2>Test 3: API 调用 + 导航 (完整流程)</h2>
+    <p>模拟模板套用流程：先调 API，成功后跳转</p>
+    <input id="templateId" value="caac5b6e-efd1-4f5e-9ae2-76ef1f870af0" style="padding: 8px; border-radius: 6px; background: #1e293b; border: 1px solid #334155; color: #e2e8f0; width: 300px;">
+    <button onclick="testApplyAndNavigate()">应用模板并跳转</button>
+    <div id="test3Result"></div>
+  </div>
+
+  <script>
+    async function testApplyAndNavigate() {
+      const resultEl = document.getElementById('test3Result');
+      const templateId = document.getElementById('templateId').value.trim();
+      if (!templateId) {
+        resultEl.innerHTML = '<div class="error">❌ 请输入 templateId</div>';
+        return;
+      }
+
+      resultEl.innerHTML = '<div>⏳ 正在调用 API: POST /api/v1/templates/' + templateId + '/apply ...</div>';
+
+      try {
+        const res = await fetch('/api/v1/templates/' + templateId + '/apply', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            template_id: templateId,
+            product_id: 'b7116a7c-02fb-482b-8cd4-08dda7b9d16c',
+            title: 'Test Script',
+            language: 'zh-CN',
+            style_vibe: '温暖治愈',
+            aspect_ratio: '9:16',
+            selling_points: ['测试卖点'],
+          }),
+        });
+
+        if (!res.ok) {
+          const errText = await res.text();
+          resultEl.innerHTML = '<div class="fail">❌ API 失败 HTTP ' + res.status + ': ' + errText.slice(0, 200) + '</div>';
+          return;
+        }
+
+        const script = await res.json();
+        resultEl.innerHTML = '<div class="pass">✅ API 成功！Script ID: ' + script.script_id + '</div>';
+        resultEl.innerHTML += '<div>正在跳转到 /scripts?mode=template&templateId=' + templateId + ' ...</div>';
+
+        // Delay slightly to see the result
+        setTimeout(() => {
+          window.location.href = '/scripts?mode=template&templateId=' + templateId;
+        }, 1000);
+      } catch (e) {
+        resultEl.innerHTML = '<div class="fail">❌ 网络错误: ' + e.message + '</div>';
+      }
+    }
+
+    // Auto-detect if we have a URL param (meaning we were redirected here)
+    window.onload = function() {
+      const params = new URLSearchParams(window.location.search);
+      if (params.get('mode') === 'template') {
+        // We successfully navigated here!
+        const tests = document.querySelectorAll('.test');
+        if (tests.length > 2) {
+          tests[0].querySelector('.result').innerHTML += '<br><b class="pass">🔄 当前 URL 参数: mode=template, templateId=' + (params.get('templateId') || '') + '</b>';
+          tests[0].querySelector('.result').innerHTML += '<br><b class="pass">🎉 导航功能验证通过！</b>';
+        }
+      }
+    };
+  </script>
+</body>
+</html>

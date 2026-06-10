@@ -1,0 +1,13 @@
+FROM tikstream-server-gateway:latest
+
+# Replace broken dist with locally-built dist
+COPY apps/server-gateway/dist /workspace/apps/server-gateway/dist
+
+# Fix @opentelemetry/api CJS compatibility with Node 22
+# The 1.9.x API uses ESM exports that break CJS require() in Node 22
+# Overwrite 1.9.1 files with 1.8.0 files (keeping pnpm symlinks intact)
+COPY node_modules/.pnpm/@opentelemetry+api@1.8.0/node_modules/@opentelemetry/api /workspace/node_modules/.pnpm/@opentelemetry+api@1.9.1/node_modules/@opentelemetry/api
+
+EXPOSE 3000
+
+CMD ["pnpm", "--filter", "@tikstream/server-gateway", "start"]

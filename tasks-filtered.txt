@@ -1,0 +1,7 @@
+4. [GET] http://localhost:3000/api/v1/tasks?product_id=915c3fcb-75f4-4aab-a82e-cdebf5bf271f&page=1&page_size=30 => [200] OK
+5. [GET] http://localhost:3000/api/v1/tasks/tsk_20260527_mpodpob3r5 => [200] OK
+7. [GET] http://localhost:3000/api/v1/tasks?product_id=915c3fcb-75f4-4aab-a82e-cdebf5bf271f&page=1&page_size=30 => [200] OK
+8. [GET] http://localhost:3000/api/v1/tasks/tsk_20260527_mpodpob3r5 => [200] OK
+9. [GET] http://localhost:3000/api/v1/creations/2f0d5b44-2998-4a88-b8d5-0dec5002f7d3 => [200] OK
+
+Note: 4 static requests not shown, run with "static" option to see them.

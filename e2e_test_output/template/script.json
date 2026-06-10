@@ -1,0 +1,87 @@
+{
+  "title": "智能无线卷发棒Pro测评！高效搞定氛围感卷发",
+  "video_duration": 14.5,
+  "style_vibe": "clean-tech活力高效测评",
+  "shots": [
+    {
+      "shot_index": 1,
+      "duration": 3,
+      "scene_description_query": "25-35岁北美职业女性早上赶通勤对着毛躁乱发焦虑的场景",
+      "visual_description": "明亮干净的卧室，穿通勤西装的年轻女性对着镜子皱眉头抓着乱糟糟的头发，床头柜上放着简约白色外观的智能无线卷发棒Pro",
+      "camera_movement": "固定近景",
+      "transition_type": "闪切",
+      "voiceover_text": "早上赶通勤还在为卷发发愁？",
+      "subtitle_text": "赶时间卷发难？",
+      "safe_zone_bounding_box": [
+        0.1,
+        0.7,
+        0.9,
+        0.9
+      ]
+    },
+    {
+      "shot_index": 2,
+      "duration": 3,
+      "scene_description_query": "智能卷发棒三档控温、防烫测试、卷发顺滑效果特写",
+      "visual_description": "特写卷发棒屏幕显示3档温度数值切换，手指触碰机身无烫感，一缕发丝卷完后蓬松顺滑无焦枯毛躁",
+      "camera_movement": "推近特写",
+      "transition_type": "滑切",
+      "voiceover_text": "3档智能控温+全机身防烫，完全不伤发！",
+      "subtitle_text": "3档控温 防烫不伤发",
+      "safe_zone_bounding_box": [
+        0.1,
+        0.7,
+        0.9,
+        0.9
+      ]
+    },
+    {
+      "shot_index": 3,
+      "duration": 3,
+      "scene_description_query": "卷发棒快充、便携随身使用场景",
+      "visual_description": "快充10分钟进度条跳满的特写，女生把小巧的卷发棒塞进迷你挎包，切到户外咖啡馆女生拿出来补卷刘海",
+      "camera_movement": "跟拍",
+      "transition_type": "跳切",
+      "voiceover_text": "10分钟快充用全天，无线随行随用！",
+      "subtitle_text": "10min快充 无线便携",
+      "safe_zone_bounding_box": [
+        0.1,
+        0.7,
+        0.9,
+        0.9
+      ]
+    },
+    {
+      "shot_index": 4,
+      "duration": 3,
+      "scene_description_query": "女性展示完成的氛围感卷发的满意状态",
+      "visual_description": "女生对着镜头笑着展示蓬松自然的大波浪卷发，转个圈展示全头造型，状态自信亮眼",
+      "camera_movement": "拉远到中景",
+      "transition_type": "缩放转场",
+      "voiceover_text": "5分钟搞定通勤氛围感卷发，效率拉满！",
+      "subtitle_text": "5min搞定氛围感卷发",
+      "safe_zone_bounding_box": [
+        0.1,
+        0.7,
+        0.9,
+        0.9
+      ]
+    },
+    {
+      "shot_index": 5,
+      "duration": 2.5,
+      "scene_description_query": "智能无线卷发棒Pro产品特写+小黄车购买弹窗",
+      "visual_description": "简约白色背景下卷发棒Pro产品特写，下方弹出亮黄色购买弹窗标注「限时8折」",
+      "camera_movement": "固定特写",
+      "transition_type": "硬切",
+      "voiceover_text": "点击小黄车抢现货手慢无！",
+      "subtitle_text": "点击下方抢现货",
+      "safe_zone_bounding_box": [
+        0.1,
+        0.7,
+        0.9,
+        0.9
+      ]
+    }
+  ]
+}

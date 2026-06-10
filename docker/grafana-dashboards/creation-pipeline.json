@@ -1,0 +1,96 @@
+{
+  "annotations": { "list": [] },
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 0,
+  "id": null,
+  "links": [],
+  "panels": [
+    {
+      "datasource": { "type": "prometheus", "uid": "tikstream-prometheus" },
+      "fieldConfig": { "defaults": { "unit": "percentunit", "min": 0, "max": 1 } },
+      "gridPos": { "h": 8, "w": 6, "x": 0, "y": 0 },
+      "id": 1,
+      "targets": [
+        { "expr": "sum(rate(tikstream_creation_transitions_total{status=\"FINISHED\"}[1h])) / sum(rate(tikstream_creation_transitions_total[1h]))", "legendFormat": "整体成功率" }
+      ],
+      "title": "创作成功率",
+      "type": "stat"
+    },
+    {
+      "datasource": { "type": "prometheus", "uid": "tikstream-prometheus" },
+      "fieldConfig": { "defaults": { "unit": "short" } },
+      "gridPos": { "h": 8, "w": 6, "x": 6, "y": 0 },
+      "id": 2,
+      "targets": [
+        { "expr": "tikstream_creation_active_total", "legendFormat": "进行中" }
+      ],
+      "title": "进行中任务",
+      "type": "stat"
+    },
+    {
+      "datasource": { "type": "prometheus", "uid": "tikstream-prometheus" },
+      "fieldConfig": { "defaults": { "unit": "short" } },
+      "gridPos": { "h": 8, "w": 6, "x": 12, "y": 0 },
+      "id": 3,
+      "targets": [
+        { "expr": "tikstream_queue_waiting_total", "legendFormat": "等待中" }
+      ],
+      "title": "队列堆积数",
+      "type": "stat"
+    },
+    {
+      "datasource": { "type": "prometheus", "uid": "tikstream-prometheus" },
+      "fieldConfig": { "defaults": { "unit": "short" } },
+      "gridPos": { "h": 8, "w": 6, "x": 18, "y": 0 },
+      "id": 4,
+      "targets": [
+        { "expr": "tikstream_creation_cache_hit_total", "legendFormat": "缓存命中" }
+      ],
+      "title": "缓存命中数",
+      "type": "stat"
+    },
+    {
+      "datasource": { "type": "prometheus", "uid": "tikstream-prometheus" },
+      "fieldConfig": { "defaults": { "unit": "s" } },
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 8 },
+      "id": 5,
+      "options": { "legend": { "displayMode": "table", "placement": "bottom" } },
+      "targets": [
+        { "expr": "rate(tikstream_creation_stage_duration_seconds_sum[1h]) / rate(tikstream_creation_stage_duration_seconds_count[1h])", "legendFormat": "平均耗时" }
+      ],
+      "title": "各阶段平均耗时",
+      "type": "timeseries"
+    },
+    {
+      "datasource": { "type": "prometheus", "uid": "tikstream-prometheus" },
+      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 8 },
+      "id": 6,
+      "targets": [
+        { "expr": "rate(tikstream_creation_failures_total[5m])", "legendFormat": "失败率趋势" }
+      ],
+      "title": "失败率趋势",
+      "type": "timeseries"
+    },
+    {
+      "datasource": { "type": "prometheus", "uid": "tikstream-prometheus" },
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 16 },
+      "id": 7,
+      "options": { "legend": { "displayMode": "table", "placement": "bottom" } },
+      "targets": [
+        { "expr": "sum(rate(tikstream_creation_transitions_total[5m])) by (current_stage)", "legendFormat": "{{current_stage}}" }
+      ],
+      "title": "阶段流转速率",
+      "type": "timeseries"
+    }
+  ],
+  "refresh": "10s",
+  "schemaVersion": 39,
+  "tags": ["tikstream", "creation"],
+  "time": { "from": "now-1h", "to": "now" },
+  "timepicker": {},
+  "timezone": "browser",
+  "title": "TikStream 创作流水线",
+  "uid": "tikstream-creation-pipeline",
+  "version": 1
+}

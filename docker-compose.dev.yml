@@ -1,0 +1,56 @@
+# =============================================================================
+# TikStream AI — 开发环境热重载覆写
+#
+# 使用方式:
+#   1. 先启动基础设施:
+#      docker compose up -d postgres redis kafka qdrant minio minio-init text-embed-server
+#
+#   2. 再启动热重载服务:
+#      docker compose -f docker-compose.yml -f docker-compose.dev.yml up -d server-gateway web-client
+#
+#   3. 实时查看日志:
+#      docker compose -f docker-compose.yml -f docker-compose.dev.yml logs -f server-gateway web-client
+#
+#   4. 停止:
+#      docker compose -f docker-compose.yml -f docker-compose.dev.yml down
+# =============================================================================
+
+services:
+  # ------------ server-gateway (后端热重载: ts-node-dev) ------------
+  server-gateway:
+    image: tikstream-server-gateway:fixed
+    # 用 pnpm dev 覆盖生产 pnpm start
+    command: ["pnpm", "--filter", "@tikstream/server-gateway", "dev"]
+    environment:
+      NODE_ENV: development
+      # 以下从 docker-compose.yml 继承，此处仅列出开发特有覆盖
+      SCRIPT_LOCAL_FALLBACK_ENABLED: "true"
+      # AI API Keys (从 .env 注入)
+      ARK_API_KEY: ${ARK_API_KEY:-}
+      ARK_BASE_URL: ${ARK_BASE_URL:-https://ark.cn-beijing.volces.com/api/v3/chat/completions}
+    ports:
+      - "3000:3000"
+    volumes:
+      # 挂载源码目录，ts-node-dev 监听文件变更自动重启
+      - ./apps/server-gateway/src:/workspace/apps/server-gateway/src:ro
+      - ./apps/server-gateway/services:/workspace/apps/server-gateway/services:ro
+      - ./shared:/workspace/shared:ro
+      - ./packages:/workspace/packages:ro
+      - ./prisma:/workspace/prisma:ro
+    # 源码以只读挂载，避免容器内误改
+
+  # ------------ web-client (前端热重载: Vite HMR) ------------
+  web-client:
+    image: tikstream-web-client:dev
+    # 用 pnpm dev 覆盖生产 pnpm preview（Vite HMR + usePolling）
+    command: ["pnpm", "--filter", "@tikstream/web-client", "dev"]
+    ports:
+      - "15173:5173"
+    environment:
+      NODE_ENV: development
+      VITE_PROXY_TARGET: http://server-gateway:3000
+      VITE_DEV_ORIGIN: http://127.0.0.1:15173
+    volumes:
+      - ./apps/web-client/src:/workspace/apps/web-client/src:ro
+      - ./shared:/workspace/shared:ro
+    # Vite HMR 通过 5173 端口，已配置 usePolling 适应 Docker 文件系统

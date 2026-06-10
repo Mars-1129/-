@@ -1,0 +1,416 @@
+name: tikstream
+
+services:
+  postgres:
+    image: postgres:16
+    container_name: tikstream-postgres
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-tikstream_ai}
+      POSTGRES_USER: ${POSTGRES_USER:-tikstream}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-tikstream_password}
+    ports:
+      - "15432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-tikstream} -d ${POSTGRES_DB:-tikstream_ai}"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    networks:
+      - tikstream
+
+  redis:
+    image: redis:7
+    container_name: tikstream-redis
+    command: ["redis-server", "--appendonly", "yes"]
+    ports:
+      - "16379:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    networks:
+      - tikstream
+
+  kafka:
+    image: apache/kafka:3.7.1
+    container_name: tikstream-kafka
+    environment:
+      KAFKA_NODE_ID: 1
+      KAFKA_PROCESS_ROLES: broker,controller
+      KAFKA_CONTROLLER_QUORUM_VOTERS: 1@kafka:9093
+      KAFKA_LISTENERS: PLAINTEXT://:9092,CONTROLLER://:9093
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT
+      KAFKA_CONTROLLER_LISTENER_NAMES: CONTROLLER
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
+    ports:
+      - "9092:9092"
+    volumes:
+      - kafka_data:/var/lib/kafka/data
+    healthcheck:
+      test: ["CMD-SHELL", "/opt/kafka/bin/kafka-topics.sh --bootstrap-server localhost:9092 --list >/dev/null 2>&1"]
+      interval: 15s
+      timeout: 10s
+      retries: 12
+    networks:
+      - tikstream
+
+  qdrant:
+    image: qdrant/qdrant:latest
+    container_name: tikstream-qdrant
+    ports:
+      - "6333:6333"
+      - "6334:6334"
+    volumes:
+      - qdrant_data:/qdrant/storage
+    healthcheck:
+      test: ["CMD-SHELL", "bash -c '</dev/tcp/127.0.0.1/6333'"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    networks:
+      - tikstream
+
+  minio:
+    image: minio/minio:latest
+    container_name: tikstream-minio
+    command: server /data --console-address ":9001"
+    environment:
+      MINIO_ROOT_USER: ${MINIO_ACCESS_KEY:-tikstream_minio}
+      MINIO_ROOT_PASSWORD: ${MINIO_SECRET_KEY:-tikstream_minio_password}
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    volumes:
+      - minio_data:/data
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:9000/minio/health/live >/dev/null 2>&1"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    networks:
+      - tikstream
+
+  minio-init:
+    image: minio/mc:latest
+    container_name: tikstream-minio-init
+    depends_on:
+      minio:
+        condition: service_healthy
+    environment:
+      MINIO_ACCESS_KEY: ${MINIO_ACCESS_KEY:-tikstream_minio}
+      MINIO_SECRET_KEY: ${MINIO_SECRET_KEY:-tikstream_minio_password}
+      MINIO_BUCKET_NAME: ${MINIO_BUCKET_NAME:-tikstream-assets}
+    entrypoint: ["/bin/sh", "-c"]
+    command: >
+      "mc alias set tikstream http://minio:9000 $$MINIO_ACCESS_KEY $$MINIO_SECRET_KEY &&
+      mc mb -p tikstream/$$MINIO_BUCKET_NAME || true &&
+      mc anonymous set download tikstream/$$MINIO_BUCKET_NAME || true"
+    networks:
+      - tikstream
+
+  prisma-migrate:
+    build:
+      context: .
+      dockerfile: apps/server-gateway/Dockerfile
+      network: host
+    container_name: tikstream-prisma-migrate
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: postgresql://${POSTGRES_USER:-tikstream}:${POSTGRES_PASSWORD:-tikstream_password}@postgres:5432/${POSTGRES_DB:-tikstream_ai}?schema=public
+    command: ["/bin/sh", "-c", "pnpm db:push && pnpm db:seed || true"]
+    networks:
+      - tikstream
+    restart: "no"
+
+  # ----- 链路追踪 (OpenTelemetry -> Jaeger) -----
+  jaeger:
+    image: jaegertracing/all-in-one:1.58
+    container_name: tikstream-jaeger
+    environment:
+      COLLECTOR_OTLP_ENABLED: "true"
+    ports:
+      - "16686:16686"
+      - "4318:4318"
+      - "14250:14250"
+    networks:
+      - tikstream
+
+  server-gateway:
+    image: tikstream-server-gateway:fixed
+    container_name: tikstream-server-gateway
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      qdrant:
+        condition: service_healthy
+      minio:
+        condition: service_healthy
+      minio-init:
+        condition: service_completed_successfully
+      prisma-migrate:
+        condition: service_completed_successfully
+      text-embed-server:
+        condition: service_healthy
+    environment:
+      NODE_ENV: production
+      NODE_OPTIONS: "--dns-result-order=ipv4first"
+      CORS_ORIGINS: ${CORS_ORIGINS:-http://localhost:15173,http://localhost:5173,http://localhost:3000}
+      PORT: 3000
+      DATABASE_URL: postgresql://${POSTGRES_USER:-tikstream}:${POSTGRES_PASSWORD:-tikstream_password}@postgres:5432/${POSTGRES_DB:-tikstream_ai}?schema=public
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      REDIS_URL: redis://redis:6379
+      KAFKA_BROKERS: kafka:9092
+      QDRANT_HOST: qdrant
+      QDRANT_PORT: 6333
+      QDRANT_URL: http://qdrant:6333
+      QDRANT_COLLECTION_ASSETS: ${QDRANT_COLLECTION_ASSETS:-asset_slices}
+      IMAGEBIND_API_URL: ${IMAGEBIND_API_URL:-http://text-embed-server:8080}
+      EMBEDDING_DIM: ${EMBEDDING_DIM:-384}
+      MINIO_ENDPOINT: minio
+      MINIO_PORT: 9000
+      MINIO_ACCESS_KEY: ${MINIO_ACCESS_KEY:-tikstream_minio}
+      MINIO_SECRET_KEY: ${MINIO_SECRET_KEY:-tikstream_minio_password}
+      MINIO_BUCKET_NAME: ${MINIO_BUCKET_NAME:-tikstream-assets}
+      MINIO_PUBLIC_ENDPOINT: ${MINIO_PUBLIC_ENDPOINT:-http://localhost:9000}
+      GATEWAY_INTERNAL_BASE_URL: http://server-gateway:3000
+      GATEWAY_PUBLIC_BASE_URL: http://localhost:3000
+      ASSETS_DEMO_DIR: /workspace/assets/demo
+      WORKSPACE_ROOT: /workspace
+      VOLC_ARK_API_URL: ${VOLC_ARK_API_URL:-https://ark.cn-beijing.volces.com/api/v3/chat/completions}
+      VOLC_ARK_API_KEY: ${VOLC_ARK_API_KEY:-}
+      SCRIPT_LOCAL_FALLBACK_ENABLED: ${SCRIPT_LOCAL_FALLBACK_ENABLED:-false}
+      VOLC_ARK_DOUBAO_PRO_ENDPOINT: ${VOLC_ARK_DOUBAO_PRO_ENDPOINT:-ep-20260514115629-vhldw}
+      VOLC_ARK_DOUBAO_VIDEO_ENDPOINT: ${VOLC_ARK_DOUBAO_VIDEO_ENDPOINT:-ep-20260514120705-pqv86}
+      VOLC_ARK_DOUBAO_RATE_LIMIT_RPM: ${VOLC_ARK_DOUBAO_RATE_LIMIT_RPM:-100}
+      DOUBAO_RPM: ${DOUBAO_RPM:-50}
+      VOLC_ARK_SEEDANCE_MAX_CONCURRENCY: ${VOLC_ARK_SEEDANCE_MAX_CONCURRENCY:-1}
+      ANALYTICS_MOCK_MODE: ${ANALYTICS_MOCK_MODE:-false}
+      INTERNAL_API_TOKEN: ${INTERNAL_API_TOKEN:-tikstream-internal-dev-token}
+      SILICONFLOW_API_KEY: ${SILICONFLOW_API_KEY:-sk-onxfpomwarftotcnhrnrfxvbyebizqoljjevkgvagxarkhhs}
+    ports:
+      - "3000:3000"
+    healthcheck:
+      test: ["CMD-SHELL", "node -e \"fetch('http://127.0.0.1:3000/health').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))\""]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+    networks:
+      - tikstream
+
+  web-client:
+    build:
+      context: .
+      dockerfile: apps/web-client/Dockerfile
+      network: host
+      args:
+        VITE_API_BASE_URL: ${VITE_API_BASE_URL:-}
+    container_name: tikstream-web-client
+    depends_on:
+      server-gateway:
+        condition: service_healthy
+    ports:
+      - "15173:5173"
+    environment:
+      VITE_API_BASE_URL: ""
+    healthcheck:
+      test: ["CMD-SHELL", "node -e \"fetch('http://127.0.0.1:5173').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))\""]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+    networks:
+      - tikstream
+
+  gpu-slicing-worker:
+    build:
+      context: .
+      dockerfile: workers/gpu-slicing-worker/Dockerfile
+      network: host
+    container_name: tikstream-gpu-slicing-worker
+    depends_on:
+      redis:
+        condition: service_healthy
+      server-gateway:
+        condition: service_healthy
+    gpus: all
+    environment:
+      NODE_ENV: production
+      NODE_OPTIONS: "--dns-result-order=ipv4first"
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      REDIS_URL: redis://redis:6379
+      REDIS_QUEUE_DB: 1
+      GPU_SLICING_WORKER_PORT: 3101
+      GATEWAY_BASE_URL: http://server-gateway:3000
+      MINIO_ENDPOINT: minio
+      MINIO_PORT: 9000
+      MINIO_ACCESS_KEY: ${MINIO_ACCESS_KEY:-tikstream_minio}
+      MINIO_SECRET_KEY: ${MINIO_SECRET_KEY:-tikstream_minio_password}
+      MINIO_BUCKET: ${MINIO_BUCKET_NAME:-tikstream-assets}
+      VOLC_ARK_API_URL: ${VOLC_ARK_API_URL:-https://ark.cn-beijing.volces.com/api/v3/chat/completions}
+      VOLC_ARK_API_KEY: ${VOLC_ARK_API_KEY:-}
+      SILICONFLOW_API_KEY: ${SILICONFLOW_API_KEY:-sk-onxfpomwarftotcnhrnrfxvbyebizqoljjevkgvagxarkhhs}
+      VOLC_ARK_DOUBAO_PRO_ENDPOINT: ${VOLC_ARK_DOUBAO_PRO_ENDPOINT:-ep-20260514115629-vhldw}
+      WORKSPACE_ROOT: /workspace
+      PYTHON_INTERPRETER: python3
+      WHISPER_DEVICE: cpu
+      WHISPER_COMPUTE_TYPE: int8
+      NVIDIA_VISIBLE_DEVICES: all
+      NVIDIA_DRIVER_CAPABILITIES: compute,utility,video
+    ports:
+      - "3101:3101"
+    healthcheck:
+      test: ["CMD-SHELL", "node -e \"fetch('http://127.0.0.1:3101/health').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))\""]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+    networks:
+      - tikstream
+
+  remotion-render-worker:
+    build:
+      context: .
+      dockerfile: workers/remotion-render-worker/Dockerfile
+      network: host
+    container_name: tikstream-remotion-render-worker
+    depends_on:
+      redis:
+        condition: service_healthy
+      server-gateway:
+        condition: service_healthy
+    environment:
+      NODE_ENV: production
+      NODE_OPTIONS: "--dns-result-order=ipv4first"
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      REDIS_URL: redis://redis:6379
+      REDIS_QUEUE_DB: 1
+      REMOTION_RENDER_WORKER_PORT: 3102
+      GATEWAY_BASE_URL: http://server-gateway:3000
+      REMOTION_RENDER_PUBLIC_BASE_URL: http://localhost:3102
+      CHROMIUM_BINARY: chromium
+      VOLC_ARK_API_URL: ${VOLC_ARK_API_URL:-https://ark.cn-beijing.volces.com/api/v3/chat/completions}
+      VOLC_ARK_API_KEY: ${VOLC_ARK_API_KEY:-}
+      VOLC_ARK_VIDEO_API_KEY: ${VOLC_ARK_VIDEO_API_KEY:-}
+      VOLC_ARK_SEEDANCE_API_URL: ${VOLC_ARK_SEEDANCE_API_URL:-https://ark.cn-beijing.volces.com/api/v3}
+      VOLC_ARK_DOUBAO_VIDEO_ENDPOINT: ${VOLC_ARK_DOUBAO_VIDEO_ENDPOINT:-ep-20260514120705-pqv86}
+      VOLC_ARK_SEEDANCE_MAX_CONCURRENCY: ${VOLC_ARK_SEEDANCE_MAX_CONCURRENCY:-1}
+      SEEDANCE_MAX_RETRIES: ${SEEDANCE_MAX_RETRIES:-8}
+      SEEDANCE_SHOT_MAX_RETRIES: ${SEEDANCE_SHOT_MAX_RETRIES:-6}
+      SEEDANCE_INTER_SHOT_DELAY_MS: ${SEEDANCE_INTER_SHOT_DELAY_MS:-12000}
+      MINIO_ENDPOINT: minio
+      MINIO_PORT: 9000
+      MINIO_ACCESS_KEY: ${MINIO_ACCESS_KEY:-tikstream_minio}
+      MINIO_SECRET_KEY: ${MINIO_SECRET_KEY:-tikstream_minio_password}
+      MINIO_BUCKET_NAME: ${MINIO_BUCKET_NAME:-tikstream-assets}
+      MINIO_PUBLIC_ENDPOINT: ${MINIO_PUBLIC_ENDPOINT:-http://localhost:9000}
+      TTS_PROVIDER: ${TTS_PROVIDER:-siliconflow}
+      SILICONFLOW_API_KEY: ${SILICONFLOW_API_KEY:-}
+      INTERNAL_API_TOKEN: ${INTERNAL_API_TOKEN:-tikstream-internal-dev-token}
+      VOLC_TTS_API_URL: ${VOLC_TTS_API_URL:-https://openspeech.bytedance.com/api/v1/tts}
+      VOLC_TTS_API_KEY: ${VOLC_TTS_API_KEY:-}
+      VOLC_TTS_APP_ID: ${VOLC_TTS_APP_ID:-tikstream_ai}
+      BGM_ASSET_BASE_URL: ${BGM_ASSET_BASE_URL:-builtin://}
+      ASSETS_BGM_DIR: /workspace/assets/bgm
+      WORKSPACE_ROOT: /workspace
+      PYTHON_INTERPRETER: python3
+    ports:
+      - "3102:3102"
+    healthcheck:
+      test: ["CMD-SHELL", "node -e \"fetch('http://127.0.0.1:3102/health').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))\""]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+    networks:
+      - tikstream
+
+  text-embed-server:
+    build:
+      context: ./services/text-embed-server
+      dockerfile: Dockerfile
+      network: host
+    container_name: tikstream-text-embed-server
+    environment:
+      TEXT_EMBED_MODEL: ${TEXT_EMBED_MODEL:-sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2}
+      EMBEDDING_DIM: ${EMBEDDING_DIM:-384}
+      HF_ENDPOINT: https://hf-mirror.com
+      HF_HUB_DISABLE_XET: "1"
+      HF_HUB_OFFLINE: "1"
+      TRANSFORMERS_OFFLINE: "1"
+      HF_HOME: /app/model-cache
+      SENTENCE_TRANSFORMERS_HOME: /app/model-cache
+    ports:
+      - "8088:8080"
+    healthcheck:
+      test: ["CMD-SHELL", "curl -sf http://localhost:8080/ready || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 10
+      start_period: 60s
+    networks:
+      - tikstream
+
+  # =============================================================================
+  # Monitoring
+  # =============================================================================
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: tikstream-prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.console.libraries=/usr/share/prometheus/console_libraries'
+      - '--web.console.templates=/usr/share/prometheus/consoles'
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./docker/prometheus.yml:/etc/prometheus/prometheus.yml
+      - prometheus_data:/prometheus
+    networks:
+      - tikstream
+    restart: unless-stopped
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: tikstream-grafana
+    environment:
+      GF_SECURITY_ADMIN_USER: ${GRAFANA_USER:-admin}
+      GF_SECURITY_ADMIN_PASSWORD: ${GRAFANA_PASSWORD:-admin}
+      GF_INSTALL_PLUGINS: ""
+    ports:
+      - "3001:3000"
+    volumes:
+      - ./docker/grafana-datasources.yml:/etc/grafana/provisioning/datasources/default.yml
+      - ./docker/grafana-dashboards:/var/lib/grafana/dashboards
+      - grafana_data:/var/lib/grafana
+    depends_on:
+      - prometheus
+    networks:
+      - tikstream
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
+  redis_data:
+  kafka_data:
+  qdrant_data:
+  minio_data:
+  prometheus_data:
+  grafana_data:
+
+networks:
+  tikstream:
+    driver: bridge

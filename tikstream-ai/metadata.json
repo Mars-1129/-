@@ -1,0 +1,6 @@
+{
+  "name": "TikStream AI",
+  "description": "An AIGC dynamic marketing video generator system for TikTok Shop eCommerce scenarios.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

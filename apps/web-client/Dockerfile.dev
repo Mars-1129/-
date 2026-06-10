@@ -1,0 +1,29 @@
+# =============================================================================
+# TikStream AI — web-client 开发镜像（支持 Vite HMR 热重载）
+# =============================================================================
+
+FROM docker.m.daocloud.io/library/node:22-bookworm-slim
+
+WORKDIR /workspace
+
+RUN npm install -g pnpm@9.15.9
+
+# 只复制依赖相关文件，先安装依赖（利用 Docker 缓存层）
+COPY package.json pnpm-workspace.yaml .npmrc tsconfig.base.json ./
+COPY shared ./shared
+COPY apps/web-client/package.json ./apps/web-client/package.json
+COPY apps/web-client/tsconfig.json ./apps/web-client/tsconfig.json
+COPY apps/web-client/vite.config.ts ./apps/web-client/vite.config.ts
+COPY apps/web-client/index.html ./apps/web-client/index.html
+COPY apps/web-client/postcss.config.cjs ./apps/web-client/postcss.config.cjs
+COPY apps/web-client/tailwind.config.ts ./apps/web-client/tailwind.config.ts
+
+RUN pnpm install
+RUN pnpm --filter @tikstream/shared-types build
+
+# 源码通过 docker-compose.dev.yml 的 volumes 挂载，不在镜像中固化
+# 这样才能实现修改源码即时生效
+
+ENV NODE_ENV=development
+
+EXPOSE 5173

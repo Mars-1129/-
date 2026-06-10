@@ -1,0 +1,19 @@
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+
+scrape_configs:
+  - job_name: 'server-gateway'
+    static_configs:
+      - targets: ['server-gateway:3000']
+    metrics_path: /metrics
+
+  - job_name: 'remotion-render-worker'
+    static_configs:
+      - targets: ['remotion-render-worker:3102']
+    metrics_path: /metrics
+
+  - job_name: 'gpu-slicing-worker'
+    static_configs:
+      - targets: ['gpu-slicing-worker:3101']
+    metrics_path: /health

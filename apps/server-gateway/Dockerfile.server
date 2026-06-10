@@ -1,0 +1,33 @@
+# Stage 1: Install dependencies with correct OTel version
+FROM docker.m.daocloud.io/library/node:22-bookworm-slim AS deps
+
+WORKDIR /workspace
+
+RUN apt-get update && apt-get install -y --no-install-recommends openssl ffmpeg && \
+    rm -rf /var/lib/apt/lists/*
+
+RUN npm install -g pnpm@9.15.9
+
+COPY package.json pnpm-workspace.yaml .npmrc tsconfig.base.json ./
+COPY prisma ./prisma
+COPY shared ./shared
+COPY packages ./packages
+COPY apps/server-gateway/package.json ./apps/server-gateway/
+COPY apps/server-gateway/tsconfig.json ./apps/server-gateway/
+COPY apps/server-gateway/tsconfig.build.json ./apps/server-gateway/
+
+RUN pnpm install --ignore-scripts
+
+# Stage 2: Production image with pre-built dist
+FROM deps AS production
+
+COPY apps/server-gateway/dist ./apps/server-gateway/dist
+COPY assets/demo ./assets/demo
+
+RUN pnpm prisma:generate
+
+ENV NODE_ENV=production
+
+EXPOSE 3000
+
+CMD ["pnpm", "--filter", "@tikstream/server-gateway", "start"]

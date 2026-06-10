@@ -1,0 +1,268 @@
+- generic [ref=e4]:
+  - complementary [ref=e18]:
+    - generic [ref=e19]:
+      - generic [ref=e20]:
+        - img [ref=e22]
+        - generic [ref=e32]:
+          - generic [ref=e33]: TikStream AI
+          - generic [ref=e34]: 业务前端工作台
+      - generic [ref=e35]:
+        - generic [ref=e36]: 真实 API
+        - generic [ref=e37]: http://localhost:3000
+    - navigation [ref=e38]:
+      - link "素材工作台 上传、切片、检索" [ref=e39] [cursor=pointer]:
+        - /url: /materials
+        - generic [ref=e40]:
+          - img [ref=e41]
+          - generic [ref=e45]:
+            - generic [ref=e46]: 素材工作台
+            - generic [ref=e47]: 上传、切片、检索
+      - link "剧本编辑器 生成、Patch、校验" [ref=e48] [cursor=pointer]:
+        - /url: /scripts
+        - generic [ref=e49]:
+          - img [ref=e50]
+          - generic [ref=e52]:
+            - generic [ref=e53]: 剧本编辑器
+            - generic [ref=e54]: 生成、Patch、校验
+      - link "创作预览 预览、导出、重渲染" [ref=e55] [cursor=pointer]:
+        - /url: /create
+        - generic [ref=e56]:
+          - img [ref=e57]
+          - generic [ref=e60]:
+            - generic [ref=e61]: 创作预览
+            - generic [ref=e62]: 预览、导出、重渲染
+      - link "任务历史 进度、日志、重试" [ref=e63] [cursor=pointer]:
+        - /url: /tasks
+        - generic [ref=e64]:
+          - img [ref=e65]
+          - generic [ref=e68]:
+            - generic [ref=e69]: 任务历史
+            - generic [ref=e70]: 进度、日志、重试
+      - link "分析看板 归因、A/B、自愈" [ref=e71] [cursor=pointer]:
+        - /url: /analytics
+        - generic [ref=e72]:
+          - img [ref=e73]
+          - generic [ref=e76]:
+            - generic [ref=e77]: 分析看板
+            - generic [ref=e78]: 归因、A/B、自愈
+      - link "模板市场 模板详情与套用" [ref=e79] [cursor=pointer]:
+        - /url: /templates
+        - generic [ref=e80]:
+          - img [ref=e81]
+          - generic [ref=e85]:
+            - generic [ref=e86]: 模板市场
+            - generic [ref=e87]: 模板详情与套用
+    - generic [ref=e89]:
+      - generic [ref=e90]: 商品上下文
+      - generic [ref=e91]: TikStream 演示商品
+      - generic [ref=e92]: beauty · TKS-DEMO-SKU-001
+      - generic [ref=e93]:
+        - generic [ref=e94]: 15秒高转化短视频
+        - generic [ref=e95]: AI自动生成分镜
+        - generic [ref=e96]: 适配TikTok Shop
+  - generic [ref=e97]:
+    - banner [ref=e98]:
+      - generic [ref=e99]:
+        - generic [ref=e100]:
+          - generic [ref=e101]: 剧本编辑器
+          - heading "生成、Patch、校验" [level=1] [ref=e102]
+        - generic [ref=e103]:
+          - combobox [ref=e105]:
+            - option "TikStream 演示商品" [selected]
+          - button "刷新上下文" [ref=e106] [cursor=pointer]:
+            - img [ref=e107]
+            - text: 刷新上下文
+    - main [ref=e112]:
+      - generic [ref=e113]:
+        - generic [ref=e114]:
+          - generic [ref=e115]:
+            - generic [ref=e116]:
+              - heading "真实剧本生成" [level=3] [ref=e117]
+              - paragraph [ref=e118]: 保留 quick / viral rewrite / template 三种入口，全部接真实 Nest API。
+            - generic [ref=e119]:
+              - generic [ref=e120]:
+                - button "快速生成" [ref=e121] [cursor=pointer]
+                - button "模板生成" [ref=e122] [cursor=pointer]
+                - button "爆款仿写" [ref=e123] [cursor=pointer]
+              - textbox "剧本标题（可选）" [ref=e124]
+              - generic [ref=e125]:
+                - textbox "zh-CN" [ref=e126]
+                - combobox [ref=e127]:
+                  - option "9:16" [selected]
+                  - option "16:9"
+              - textbox "高转化 UGC / 强节奏口播 / 开箱对比" [ref=e128]: 高转化 UGC
+              - textbox "约束条件，逗号或换行分隔，例如：禁止夸大功效、首屏 3 秒必须给卖点" [ref=e129]
+              - generic [ref=e130]:
+                - generic [ref=e131]: 当前商品上下文
+                - generic [ref=e132]: TikStream 演示商品
+                - generic [ref=e133]: 15秒高转化短视频 · AI自动生成分镜 · 适配TikTok Shop
+              - button "生成真实剧本" [ref=e134] [cursor=pointer]:
+                - img [ref=e135]
+                - text: 生成真实剧本
+          - generic [ref=e137]:
+            - generic [ref=e138]:
+              - heading "剧本列表" [level=3] [ref=e139]
+              - paragraph [ref=e140]: 按商品拉取真实剧本列表，当前工作稿件可继续 Patch 编辑与保存。
+            - generic [ref=e141]:
+              - generic [ref=e142]:
+                - generic [ref=e143]: 2 份剧本
+                - button "刷新" [ref=e144] [cursor=pointer]:
+                  - img [ref=e145]
+                  - text: 刷新
+              - button "15秒高转化短视频短视频脚本 TEMPLATE_DRIVEN · 9:16 · 15s 5 shots 2026/5/28 13:42:35" [ref=e147] [cursor=pointer]:
+                - generic [ref=e148]:
+                  - generic [ref=e149]:
+                    - generic [ref=e150]: 15秒高转化短视频短视频脚本
+                    - generic [ref=e151]: TEMPLATE_DRIVEN · 9:16 · 15s
+                  - generic [ref=e152]: 5 shots
+                - generic [ref=e153]: 2026/5/28 13:42:35
+              - button "15秒高转化短视频短视频脚本 PROMPT_DRIVEN · 9:16 · 15s 5 shots 2026/5/28 02:08:38" [ref=e154] [cursor=pointer]:
+                - generic [ref=e155]:
+                  - generic [ref=e156]:
+                    - generic [ref=e157]: 15秒高转化短视频短视频脚本
+                    - generic [ref=e158]: PROMPT_DRIVEN · 9:16 · 15s
+                  - generic [ref=e159]: 5 shots
+                - generic [ref=e160]: 2026/5/28 02:08:38
+        - generic [ref=e162]:
+          - generic [ref=e164]:
+            - generic [ref=e165]:
+              - heading "15秒高转化短视频短视频脚本" [level=3] [ref=e166]
+              - paragraph [ref=e167]: 选中分镜后直接生成 JSON Patch，并在右侧实时显示配时建议。
+            - generic [ref=e168]:
+              - generic [ref=e169]: TEMPLATE_DRIVEN
+              - generic [ref=e170]: 9:16
+              - button "创作成片" [ref=e171] [cursor=pointer]:
+                - img [ref=e172]
+                - text: 创作成片
+              - button "保存剧本" [ref=e174] [cursor=pointer]:
+                - img [ref=e175]
+                - text: 保存剧本
+          - generic [ref=e180]:
+            - generic [ref=e181]:
+              - generic [ref=e182]:
+                - generic [ref=e183]: 5 个分镜
+                - generic [ref=e184]:
+                  - button "在所选前插入" [ref=e185] [cursor=pointer]:
+                    - img [ref=e186]
+                    - text: 在所选前插入
+                  - button "在所选后插入" [ref=e187] [cursor=pointer]:
+                    - img [ref=e188]
+                    - text: 在所选后插入
+              - generic [ref=e189]:
+                - generic [ref=e190]:
+                  - button "Shot 1 3s · Dolly_In_Fast" [ref=e191] [cursor=pointer]:
+                    - generic [ref=e192]: Shot 1
+                    - generic [ref=e193]: 3s · Dolly_In_Fast
+                  - generic [ref=e194]:
+                    - button [disabled]:
+                      - img
+                    - button [ref=e195] [cursor=pointer]:
+                      - img [ref=e196]
+                    - button [ref=e198] [cursor=pointer]:
+                      - img [ref=e199]
+                - generic [ref=e202]: 开场先看 15秒高转化短视频，把用户最关心的信息直接放到画面前段。
+              - generic [ref=e203]:
+                - generic [ref=e204]:
+                  - button "Shot 2 3.5s · Pan_Left" [ref=e205] [cursor=pointer]:
+                    - generic [ref=e206]: Shot 2
+                    - generic [ref=e207]: 3.5s · Pan_Left
+                  - generic [ref=e208]:
+                    - button [disabled]:
+                      - img
+                    - button [disabled]:
+                      - img
+                    - button [disabled]:
+                      - img
+                - generic [ref=e209]: 第二段强调 AI自动生成分镜，让观众理解它在真实使用里的具体价值。
+              - generic [ref=e210]:
+                - generic [ref=e211]:
+                  - button "Shot 3 3.5s · Tilt_Up" [ref=e212] [cursor=pointer]:
+                    - generic [ref=e213]: Shot 3
+                    - generic [ref=e214]: 3.5s · Tilt_Up
+                  - generic [ref=e215]:
+                    - button [disabled]:
+                      - img
+                    - button [disabled]:
+                      - img
+                    - button [disabled]:
+                      - img
+                - generic [ref=e216]: 再把 适配TikTok Shop 讲清楚，用清晰的对比帮助 跨境电商运营团队 快速建立判断。
+              - generic [ref=e217]:
+                - generic [ref=e218]:
+                  - button "Shot 4 3s · Dolly_Out" [ref=e219] [cursor=pointer]:
+                    - generic [ref=e220]: Shot 4
+                    - generic [ref=e221]: 3s · Dolly_Out
+                  - generic [ref=e222]:
+                    - button [disabled]:
+                      - img
+                    - button [disabled]:
+                      - img
+                    - button [disabled]:
+                      - img
+                - generic [ref=e223]: 把核心功能和使用场景合在一起说明，让信息完整但节奏仍然紧凑。
+              - generic [ref=e224]:
+                - generic [ref=e225]:
+                  - button "Shot 5 2s · Static" [ref=e226] [cursor=pointer]:
+                    - generic [ref=e227]: Shot 5
+                    - generic [ref=e228]: 2s · Static
+                  - generic [ref=e229]:
+                    - button [disabled]:
+                      - img
+                    - button [disabled]:
+                      - img
+                    - button [disabled]:
+                      - img
+                - generic [ref=e230]: 如果你想进一步了解 15秒高转化短视频 和 AI自动生成分镜，可以继续查看商品详情。
+            - generic [ref=e231]:
+              - generic [ref=e232]:
+                - generic [ref=e233]:
+                  - generic [ref=e234]: 镜头检索语句
+                  - textbox [ref=e235]: vertical ecommerce hero shot for 15秒高转化短视频
+                - generic [ref=e236]:
+                  - generic [ref=e237]: 视觉描述
+                  - textbox [ref=e238]: 产品主体快速出场，开场镜头直接聚焦 15秒高转化短视频，画面保持干净利落并突出 高转化 UGC 气质。
+              - generic [ref=e239]:
+                - generic [ref=e240]: 口播文案
+                - textbox [ref=e241]: 开场先看 15秒高转化短视频，把用户最关心的信息直接放到画面前段。
+              - generic [ref=e242]:
+                - generic [ref=e243]: 字幕文案
+                - textbox [ref=e244]: 15秒高转化短视频
+              - generic [ref=e245]:
+                - generic [ref=e246]:
+                  - generic [ref=e247]: 时长（秒）
+                  - textbox [ref=e248]: "3"
+                - generic [ref=e249]:
+                  - generic [ref=e250]: 运镜
+                  - combobox [ref=e251]:
+                    - option "Static"
+                    - option "Dolly_In_Fast" [selected]
+                    - option "Dolly_Out"
+                    - option "Pan_Left"
+                    - option "Tilt_Up"
+                - generic [ref=e252]:
+                  - generic [ref=e253]: 转场
+                  - combobox [ref=e254]:
+                    - option "None"
+                    - option "Fade_In" [selected]
+                    - option "Dissolve"
+                    - option "Wipe"
+              - generic [ref=e255]:
+                - generic [ref=e257]: 真实配时校验
+                - generic [ref=e258]:
+                  - generic [ref=e259]:
+                    - generic [ref=e260]: 预计时长
+                    - generic [ref=e261]: 9.8s
+                  - generic [ref=e262]:
+                    - generic [ref=e263]: 当前分镜
+                    - generic [ref=e264]: 3s
+                  - generic [ref=e265]:
+                    - generic [ref=e266]:
+                      - img [ref=e267]
+                      - generic [ref=e270]: 需要调整
+                    - generic [ref=e271]: 请精简 20 个字或提高分镜时长到 9.8 秒以上
+                    - generic [ref=e272]: 超出词数：20
+              - generic [ref=e273]:
+                - button "保存当前分镜" [ref=e274] [cursor=pointer]:
+                  - img [ref=e275]
+                  - text: 保存当前分镜
+                - button "重置草稿" [ref=e279] [cursor=pointer]

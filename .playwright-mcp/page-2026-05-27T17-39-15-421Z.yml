@@ -1,0 +1,4 @@
+- generic [ref=e4]:
+  - img [ref=e6]
+  - heading "正在加载业务工作台" [level=1] [ref=e16]
+  - paragraph [ref=e17]: 先读取商品上下文，再按真实接口加载各页面数据。

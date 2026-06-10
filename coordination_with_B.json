@@ -1,0 +1,136 @@
+{
+  "$schema": "TikStream AI — 人员A → 人员B 跨模块协调清单",
+  "version": "1.0",
+  "generated_at": "2026-05-26T18:00:00Z",
+  "generated_by": "人员A",
+  "description": "此文件记录人员A在 Material 模块开发过程中的所有需要人员B协调的事项。人员B 负责接口契约 (shared/api_types.ts)、ImageBind 推理服务部署、Qdrant 初始化、以及跨模块 PR review。",
+  "coordination_items": [
+    {
+      "id": "COORD-001",
+      "task": "task-018 — Material 素材列表查询 (GET /api/v1/materials)",
+      "priority": "P0",
+      "status": "PENDING",
+      "type": "接口契约同步",
+      "description": "shared/api_types.ts 中 MaterialListQuery 需从 page-based 分页升级为 cursor-based 分页",
+      "details": [
+        "新增 cursor?: string 和 limit?: number 替换 page/page_size",
+        "新增 source_type?: MaterialSourceType、keyword?: string、created_at_start?: string、created_at_end?: string",
+        "新增 MaterialListItem 接口：material_id/file_name/type/source_type/status/thumbnail_url/duration_seconds/file_size_bytes/slices_count/product_title/product_category/created_at",
+        "更新 ApiRouteMap['GET /api/v1/materials'] 的 query 和 response 类型"
+      ],
+      "affected_files": ["shared/api_types.ts"],
+      "A_side_implementation": "模块内部类型已定义在 material.service.ts (MaterialListItem/CursorPageInfo/MaterialListResponse)，待人员B同步后移除本地类型替换为 shared types import"
+    },
+    {
+      "id": "COORD-002",
+      "task": "task-019 — Material 素材详情查询 (GET /api/v1/materials/:material_id)",
+      "priority": "P0",
+      "status": "PENDING",
+      "type": "接口契约同步",
+      "description": "shared/api_types.ts 中 MaterialDetailResponse 的 material 字段需扩展为包含内嵌 product 子对象",
+      "details": [
+        "MaterialDetailItem: 新增 product: { id, title, category, selling_points } | null",
+        "MaterialDetailSlice: 新增 embedding_version, sfx_url 等 Worker 产出字段",
+        "确认 MaterialSlice 接口定义与当前 Prisma schema 一致"
+      ],
+      "affected_files": ["shared/api_types.ts"],
+      "A_side_implementation": "模块内部类型已定义在 material.service.ts (MaterialDetailItem/MaterialDetailSlice/MaterialDetailResponse)，待人员B同步"
+    },
+    {
+      "id": "COORD-003",
+      "task": "task-020 — Material 素材删除 (DELETE /api/v1/materials/:material_id)",
+      "priority": "P0",
+      "status": "DONE",
+      "type": "接口契约同步",
+      "description": "shared/api_types.ts 新增 MATERIAL_DELETE_CONFLICT 错误码 (409, non-retryable)",
+      "details": [
+        "已新增 ErrorCode.MATERIAL_DELETE_CONFLICT: 'MATERIAL_DELETE_CONFLICT'",
+        "需在 errors_catalog 中注册：status=409, retryable=false, desc='素材存在外键约束无法删除'"
+      ],
+      "affected_files": ["shared/api_types.ts"],
+      "A_side_implementation": "已在 shared/api_types.ts 中直接添加"
+    },
+    {
+      "id": "COORD-004",
+      "task": "task-021 — Material 素材多维检索 (POST /api/v1/materials/search)",
+      "priority": "P1",
+      "status": "PENDING",
+      "type": "基础设施部署",
+      "description": "ImageBind 512维推理服务部署（人员B 的 RTX 5080）",
+      "details": [
+        "部署一个简单的 ImageBind HTTP 推理端点（建议 Flask/FastAPI 封装）",
+        "接收 POST { text: string } → 返回 { embedding: [512 floats] }",
+        "可选支持 image_url / image_base64 入参（当前阶段 text 优先）",
+        "端点地址需写入 .env 或 docker-compose 环境变量：IMAGEBIND_API_URL",
+        "如果暂未就绪，Material Search 会自动降级到 PostgreSQL 关键字检索，不影响功能可用性"
+      ],
+      "affected_files": ["新文件: 推理服务脚本 (Python)", "docker-compose.yml (新增 imagebind service)", ".env.example (新增 IMAGEBIND_API_URL)"],
+      "A_side_implementation": "ImageBindClientService 已预留 HTTP 调用 + mock 零向量降级，部署就绪后切换环境变量即可启用语义检索"
+    },
+    {
+      "id": "COORD-005",
+      "task": "task-021 — Material 素材多维检索 (POST /api/v1/materials/search)",
+      "priority": "P1",
+      "status": "PENDING",
+      "type": "基础设施部署",
+      "description": "Qdrant collection 初始化脚本",
+      "details": [
+        "在 Qdrant 中创建 collection：asset_slices",
+        "配置：dim=512, distance=Cosine",
+        "建议通过 Prisma seed 脚本或 docker-compose 初始化容器执行",
+        "Qdrant 容器已在 docker-compose.yml 中配置 (qdrant/qdrant:latest, port 6333/6334)"
+      ],
+      "affected_files": ["新文件: prisma/seed.ts (新增 Qdrant 初始化逻辑)", "或 docker-compose init 脚本"],
+      "A_side_implementation": "QdrantClientService 会按需检查 collection 存在性，不存在时静默降级到 keyword 检索 + WARN 日志"
+    },
+    {
+      "id": "COORD-006",
+      "task": "task-021 — Material 素材多维检索 (POST /api/v1/materials/search)",
+      "priority": "P1",
+      "status": "PENDING",
+      "type": "数据同步",
+      "description": "MaterialSlice 向量化并写入 Qdrant",
+      "details": [
+        "gpu-slicing-worker (task-017) 产出 Dense Caption 后可异步触发 ImageBind 向量化",
+        "向量化完成后通过 embedding_version 字段标记版本",
+        "Qdrant upsert 幂等键使用 slice_id，确保重复写入不产生脏数据",
+        "当前阶段：Material Search 的 Qdrant 路径依赖 Qdrant 中有数据，若无数据自动降级 KEYWORD"
+      ],
+      "affected_files": ["workers/gpu-slicing-worker/src/caption.processor.ts (新增 embedding 触发)", "新文件或修改: 向量化写入 Qdrant 的逻辑"],
+      "A_side_implementation": "search 端点已支持双路径自动降级，即使 Qdrant 中无数据也不会报错"
+    },
+    {
+      "id": "COORD-007",
+      "task": "task-018/019/020/021 — Material CRUD 全量",
+      "priority": "P1",
+      "status": "PENDING",
+      "type": "PR 审查",
+      "description": "人员A Material 模块所有端点完成后需人员B 进行跨模块 PR review",
+      "details": [
+        "审查 Controller 端点路径与 ApiRouteMap 一致性",
+        "审查 shared/api_types.ts 修改是否与模块内部类型对齐",
+        "审查 Swagger 注解完整性",
+        "审查响应包装是否符合统一 ApiSuccessResponse/ApiErrorResponse 格式"
+      ],
+      "affected_files": ["apps/server-gateway/src/material/*.ts", "shared/api_types.ts", "tests/material_*.spec.ts"]
+    }
+  ],
+  "summary": {
+    "total_items": 7,
+    "pending": 6,
+    "done": 1,
+    "by_category": {
+      "接口契约同步": 3,
+      "基础设施部署": 2,
+      "数据同步": 1,
+      "PR 审查": 1
+    },
+    "blocking_notes": [
+      "COORD-001/002 (接口契约同步) 不阻塞功能开发，模块内部已有本地类型定义",
+      "COORD-004 (ImageBind 推理服务) 不阻塞功能，search 端点会自动降级到 keyword 检索",
+      "COORD-005 (Qdrant collection 初始化) 不阻塞功能，search 端点会自动降级到 keyword 检索",
+      "COORD-006 (向量化入库) 不阻塞功能，search 端点会自动降级到 keyword 检索",
+      "所有 PENDING 项目均为增强能力，核心 CRUD 功能已完整可用"
+    ]
+  }
+}

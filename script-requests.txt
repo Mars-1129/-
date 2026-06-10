@@ -1,0 +1,5 @@
+4. [GET] http://localhost:3000/api/v1/scripts?product_id=915c3fcb-75f4-4aab-a82e-cdebf5bf271f&page=1&page_size=50 => [200] OK
+7. [GET] http://localhost:3000/api/v1/scripts?product_id=915c3fcb-75f4-4aab-a82e-cdebf5bf271f&page=1&page_size=50 => [200] OK
+9. [POST] http://localhost:3000/api/v1/scripts/generate/quick => [201] Created
+
+Note: 3 static requests not shown, run with "static" option to see them.

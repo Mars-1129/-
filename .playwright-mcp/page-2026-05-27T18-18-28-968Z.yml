@@ -1,0 +1,135 @@
+- generic [ref=e4]:
+  - complementary [ref=e18]:
+    - generic [ref=e19]:
+      - generic [ref=e20]:
+        - img [ref=e22]
+        - generic [ref=e32]:
+          - generic [ref=e33]: TikStream AI
+          - generic [ref=e34]: 业务前端工作台
+      - generic [ref=e35]:
+        - generic [ref=e36]: 真实 API
+        - generic [ref=e37]: http://localhost:3000
+    - navigation [ref=e38]:
+      - link "素材工作台 上传、切片、检索" [ref=e39] [cursor=pointer]:
+        - /url: /materials
+        - generic [ref=e40]:
+          - img [ref=e41]
+          - generic [ref=e45]:
+            - generic [ref=e46]: 素材工作台
+            - generic [ref=e47]: 上传、切片、检索
+      - link "剧本编辑器 生成、Patch、校验" [ref=e48] [cursor=pointer]:
+        - /url: /scripts
+        - generic [ref=e49]:
+          - img [ref=e50]
+          - generic [ref=e52]:
+            - generic [ref=e53]: 剧本编辑器
+            - generic [ref=e54]: 生成、Patch、校验
+      - link "创作预览 预览、导出、重渲染" [ref=e55] [cursor=pointer]:
+        - /url: /create
+        - generic [ref=e56]:
+          - img [ref=e57]
+          - generic [ref=e60]:
+            - generic [ref=e61]: 创作预览
+            - generic [ref=e62]: 预览、导出、重渲染
+      - link "任务历史 进度、日志、重试" [active] [ref=e63] [cursor=pointer]:
+        - /url: /tasks
+        - generic [ref=e64]:
+          - img [ref=e65]
+          - generic [ref=e68]:
+            - generic [ref=e69]: 任务历史
+            - generic [ref=e70]: 进度、日志、重试
+      - link "分析看板 归因、A/B、自愈" [ref=e71] [cursor=pointer]:
+        - /url: /analytics
+        - generic [ref=e72]:
+          - img [ref=e73]
+          - generic [ref=e76]:
+            - generic [ref=e77]: 分析看板
+            - generic [ref=e78]: 归因、A/B、自愈
+      - link "模板市场 模板详情与套用" [ref=e79] [cursor=pointer]:
+        - /url: /templates
+        - generic [ref=e80]:
+          - img [ref=e81]
+          - generic [ref=e85]:
+            - generic [ref=e86]: 模板市场
+            - generic [ref=e87]: 模板详情与套用
+    - generic [ref=e89]:
+      - generic [ref=e90]: 商品上下文
+      - generic [ref=e91]: TikStream 演示商品
+      - generic [ref=e92]: beauty · TKS-DEMO-SKU-001
+      - generic [ref=e93]:
+        - generic [ref=e94]: 15秒高转化短视频
+        - generic [ref=e95]: AI自动生成分镜
+        - generic [ref=e96]: 适配TikTok Shop
+  - generic [ref=e97]:
+    - banner [ref=e98]:
+      - generic [ref=e99]:
+        - generic [ref=e100]:
+          - generic [ref=e101]: 任务历史
+          - heading "进度、日志、重试" [level=1] [ref=e102]
+        - generic [ref=e103]:
+          - combobox [ref=e105]:
+            - option "TikStream 演示商品" [selected]
+          - button "刷新上下文" [ref=e106] [cursor=pointer]:
+            - img [ref=e107]
+            - text: 刷新上下文
+    - main [ref=e112]:
+      - generic [ref=e177]:
+        - generic [ref=e178]:
+          - generic [ref=e179]:
+            - heading "任务历史" [level=3] [ref=e180]
+            - paragraph [ref=e181]: 真实任务投影 + SSE 进度流，支持刷新恢复、失败重试、取消和结果回看。
+          - generic [ref=e183]: 当前商品：TikStream 演示商品
+        - generic [ref=e184]:
+          - generic [ref=e185]:
+            - generic [ref=e186]:
+              - heading "任务列表" [level=3] [ref=e187]
+              - paragraph [ref=e188]: 1 条任务记录
+            - button "tsk_20260527_mpodpob3r5 0% PENDING · QUEUE_ALLOCATION 2026/5/28 02:09:49" [ref=e190] [cursor=pointer]:
+              - generic [ref=e191]:
+                - generic [ref=e192]: tsk_20260527_mpodpob3r5
+                - generic [ref=e193]: 0%
+              - generic [ref=e194]: PENDING · QUEUE_ALLOCATION
+              - generic [ref=e195]: 2026/5/28 02:09:49
+          - generic [ref=e196]:
+            - generic [ref=e197]:
+              - generic [ref=e198]:
+                - heading "任务详情" [level=3] [ref=e199]
+                - paragraph [ref=e200]: task tsk_20260527_mpodpob3r5
+              - generic [ref=e201]:
+                - generic [ref=e202]: PENDING · QUEUE_ALLOCATION
+                - generic [ref=e204]:
+                  - generic [ref=e205]: 进度
+                  - generic [ref=e206]: 0%
+                - generic [ref=e208]:
+                  - generic [ref=e209]: 创建时间：2026/5/28 02:09:49
+                  - generic [ref=e210]: 更新时间：2026/5/28 02:09:49
+                  - generic [ref=e211]: creation_id：2f0d5b44-2998-4a88-b8d5-0dec5002f7d3
+                  - generic [ref=e212]: trace_id：trc_20260527_creation_2f0d5b44
+                - generic [ref=e213]: 最近消息：QUEUE_ALLOCATION
+                - generic [ref=e214]:
+                  - button "取消任务" [ref=e215] [cursor=pointer]:
+                    - img [ref=e216]
+                    - text: 取消任务
+                  - button "失败后重试" [disabled]:
+                    - img
+                    - text: 失败后重试
+            - generic [ref=e218]:
+              - generic [ref=e219]:
+                - heading "输出结果" [level=3] [ref=e220]
+                - paragraph [ref=e221]: creation 2f0d5b44-2998-4a88-b8d5-0dec5002f7d3
+              - generic [ref=e223]: 输出视频尚未生成，任务完成后会在这里回显视频预览和导出链接。
+            - generic [ref=e224]:
+              - generic [ref=e225]:
+                - heading "任务日志" [level=3] [ref=e226]
+                - paragraph [ref=e227]: 当前先展示结构化阶段消息；后续 worker 侧日志接入后可直接替换。
+              - generic [ref=e230]:
+                - generic [ref=e231]:
+                  - generic [ref=e232]:
+                    - img [ref=e233]
+                    - text: 2026/5/28 02:09:49
+                  - generic [ref=e235]: task.stage.changed · QUEUE_ALLOCATION
+                - generic [ref=e236]:
+                  - generic [ref=e237]:
+                    - img [ref=e238]
+                    - text: 2026/5/28 02:09:49
+                  - generic [ref=e240]: QUEUE_ALLOCATION · 0%

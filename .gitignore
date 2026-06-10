@@ -1,0 +1,15 @@
+node_modules/
+dist/
+build/
+coverage/
+.pnpm-store/
+.env
+.env.local
+.env.*.local
+!.env.example
+*.log
+.DS_Store
+.vscode/
+.idea/
+.cache/
+playwright-report/

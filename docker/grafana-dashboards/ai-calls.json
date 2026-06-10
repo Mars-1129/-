@@ -1,0 +1,91 @@
+{
+  "annotations": { "list": [] },
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 0,
+  "id": null,
+  "links": [],
+  "panels": [
+    {
+      "datasource": { "type": "prometheus", "uid": "tikstream-prometheus" },
+      "fieldConfig": { "defaults": { "unit": "short" } },
+      "gridPos": { "h": 8, "w": 8, "x": 0, "y": 0 },
+      "id": 1,
+      "targets": [
+        { "expr": "rate(tikstream_doubao_api_calls_total[5m]) * 60", "legendFormat": "Doubao RPM" }
+      ],
+      "title": "Doubao 调用速率 (RPM)",
+      "type": "timeseries"
+    },
+    {
+      "datasource": { "type": "prometheus", "uid": "tikstream-prometheus" },
+      "fieldConfig": { "defaults": { "unit": "short" } },
+      "gridPos": { "h": 8, "w": 8, "x": 8, "y": 0 },
+      "id": 2,
+      "targets": [
+        { "expr": "rate(tikstream_seedance_api_calls_total[5m]) * 60", "legendFormat": "Seedance RPM" }
+      ],
+      "title": "Seedance 调用速率 (RPM)",
+      "type": "timeseries"
+    },
+    {
+      "datasource": { "type": "prometheus", "uid": "tikstream-prometheus" },
+      "fieldConfig": { "defaults": { "unit": "percentunit", "min": 0, "max": 1 } },
+      "gridPos": { "h": 8, "w": 8, "x": 16, "y": 0 },
+      "id": 3,
+      "targets": [
+        { "expr": "sum(rate(tikstream_doubao_api_calls_total{status=\"error\"}[5m])) / sum(rate(tikstream_doubao_api_calls_total[5m]))", "legendFormat": "Doubao 错误率" },
+        { "expr": "sum(rate(tikstream_seedance_api_calls_total{status=\"error\"}[5m])) / sum(rate(tikstream_seedance_api_calls_total[5m]))", "legendFormat": "Seedance 错误率" }
+      ],
+      "title": "AI API 错误率",
+      "type": "gauge"
+    },
+    {
+      "datasource": { "type": "prometheus", "uid": "tikstream-prometheus" },
+      "fieldConfig": { "defaults": { "unit": "s" } },
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 8 },
+      "id": 4,
+      "options": { "legend": { "displayMode": "table", "placement": "bottom" } },
+      "targets": [
+        { "expr": "histogram_quantile(0.50, sum(rate(tikstream_tts_duration_seconds_bucket[5m])) by (le))", "legendFormat": "P50" },
+        { "expr": "histogram_quantile(0.95, sum(rate(tikstream_tts_duration_seconds_bucket[5m])) by (le))", "legendFormat": "P95" },
+        { "expr": "histogram_quantile(0.99, sum(rate(tikstream_tts_duration_seconds_bucket[5m])) by (le))", "legendFormat": "P99" }
+      ],
+      "title": "TTS 生成耗时 P50/P95/P99",
+      "type": "timeseries"
+    },
+    {
+      "datasource": { "type": "prometheus", "uid": "tikstream-prometheus" },
+      "fieldConfig": { "defaults": { "unit": "s" } },
+      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 8 },
+      "id": 5,
+      "options": { "legend": { "displayMode": "table", "placement": "bottom" } },
+      "targets": [
+        { "expr": "histogram_quantile(0.50, sum(rate(tikstream_seedance_generation_duration_seconds_bucket[5m])) by (le))", "legendFormat": "P50" },
+        { "expr": "histogram_quantile(0.95, sum(rate(tikstream_seedance_generation_duration_seconds_bucket[5m])) by (le))", "legendFormat": "P95" }
+      ],
+      "title": "Seedance 视频生成耗时",
+      "type": "timeseries"
+    },
+    {
+      "datasource": { "type": "prometheus", "uid": "tikstream-prometheus" },
+      "gridPos": { "h": 8, "w": 24, "x": 0, "y": 16 },
+      "id": 6,
+      "options": { "legend": { "displayMode": "table", "placement": "bottom" } },
+      "targets": [
+        { "expr": "rate(tikstream_external_api_errors_total[5m])", "legendFormat": "error={{error_code}}" }
+      ],
+      "title": "外部 API 错误趋势",
+      "type": "timeseries"
+    }
+  ],
+  "refresh": "10s",
+  "schemaVersion": 39,
+  "tags": ["tikstream", "ai"],
+  "time": { "from": "now-1h", "to": "now" },
+  "timepicker": {},
+  "timezone": "browser",
+  "title": "TikStream AI 调用监控",
+  "uid": "tikstream-ai-calls",
+  "version": 1
+}

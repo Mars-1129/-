@@ -1,0 +1,141 @@
+- generic [ref=e4]:
+  - complementary [ref=e5]:
+    - generic [ref=e6]:
+      - generic [ref=e7]:
+        - img [ref=e9]
+        - generic [ref=e19]:
+          - generic [ref=e20]: TikStream AI
+          - generic [ref=e21]: 业务前端工作台
+      - generic [ref=e22]:
+        - generic [ref=e23]: 真实 API
+        - generic [ref=e24]: http://localhost:3000
+    - navigation [ref=e25]:
+      - link "素材工作台 上传、切片、检索" [ref=e26] [cursor=pointer]:
+        - /url: /materials
+        - generic [ref=e27]:
+          - img [ref=e28]
+          - generic [ref=e32]:
+            - generic [ref=e33]: 素材工作台
+            - generic [ref=e34]: 上传、切片、检索
+      - link "剧本编辑器 生成、Patch、校验" [ref=e35] [cursor=pointer]:
+        - /url: /scripts
+        - generic [ref=e36]:
+          - img [ref=e37]
+          - generic [ref=e39]:
+            - generic [ref=e40]: 剧本编辑器
+            - generic [ref=e41]: 生成、Patch、校验
+      - link "创作预览 预览、导出、重渲染" [ref=e42] [cursor=pointer]:
+        - /url: /create
+        - generic [ref=e43]:
+          - img [ref=e44]
+          - generic [ref=e47]:
+            - generic [ref=e48]: 创作预览
+            - generic [ref=e49]: 预览、导出、重渲染
+      - link "任务历史 进度、日志、重试" [ref=e50] [cursor=pointer]:
+        - /url: /tasks
+        - generic [ref=e51]:
+          - img [ref=e52]
+          - generic [ref=e55]:
+            - generic [ref=e56]: 任务历史
+            - generic [ref=e57]: 进度、日志、重试
+      - link "分析看板 归因、A/B、自愈" [ref=e58] [cursor=pointer]:
+        - /url: /analytics
+        - generic [ref=e59]:
+          - img [ref=e60]
+          - generic [ref=e63]:
+            - generic [ref=e64]: 分析看板
+            - generic [ref=e65]: 归因、A/B、自愈
+      - link "模板市场 模板详情与套用" [ref=e66] [cursor=pointer]:
+        - /url: /templates
+        - generic [ref=e67]:
+          - img [ref=e68]
+          - generic [ref=e72]:
+            - generic [ref=e73]: 模板市场
+            - generic [ref=e74]: 模板详情与套用
+    - generic [ref=e76]:
+      - generic [ref=e77]: 商品上下文
+      - generic [ref=e78]: TikStream 演示商品
+      - generic [ref=e79]: beauty · TKS-DEMO-SKU-001
+      - generic [ref=e80]:
+        - generic [ref=e81]: 15秒高转化短视频
+        - generic [ref=e82]: AI自动生成分镜
+        - generic [ref=e83]: 适配TikTok Shop
+  - generic [ref=e84]:
+    - banner [ref=e85]:
+      - generic [ref=e86]:
+        - generic [ref=e87]:
+          - generic [ref=e88]: 创作预览
+          - heading "预览、导出、重渲染" [level=1] [ref=e89]
+        - generic [ref=e90]:
+          - combobox [ref=e92]:
+            - option "TikStream 演示商品" [selected]
+          - button "刷新上下文" [ref=e93] [cursor=pointer]:
+            - img [ref=e94]
+            - text: 刷新上下文
+    - main [ref=e99]:
+      - generic [ref=e100]:
+        - generic [ref=e101]:
+          - generic [ref=e102]:
+            - heading "创作工作台" [level=3] [ref=e103]
+            - paragraph [ref=e104]: 基于真实 script / creation / task API 进行一键成片、Remotion 预览、局部重渲染与导出追踪。
+          - generic [ref=e106]:
+            - generic [ref=e107]:
+              - generic [ref=e108]: 当前商品
+              - generic [ref=e109]: TikStream 演示商品
+            - generic [ref=e110]:
+              - text: 剧本
+              - combobox "剧本" [disabled] [ref=e111]:
+                - option "请选择剧本" [selected]
+            - generic [ref=e112]:
+              - generic [ref=e113]:
+                - text: 画幅
+                - combobox "画幅" [ref=e114]:
+                  - option "9:16 · 1080x1920" [selected]
+                  - option "16:9 · 1920x1080"
+              - generic [ref=e115]:
+                - text: 导出格式
+                - combobox "导出格式" [ref=e116]:
+                  - option "MP4" [selected]
+                  - option "MOV"
+                  - option "WEBM"
+            - generic [ref=e117]:
+              - button "一键成片" [disabled]:
+                - img
+                - text: 一键成片
+        - generic [ref=e118]:
+          - generic [ref=e119]:
+            - generic [ref=e120]:
+              - heading "分镜时间轴" [level=3] [ref=e121]
+              - paragraph [ref=e122]: 选择剧本后查看可执行分镜
+            - generic [ref=e124]: 暂无可用剧本，请先在剧本页生成内容。
+          - generic [ref=e125]:
+            - generic [ref=e126]:
+              - heading "Remotion 预览台" [level=3] [ref=e127]
+              - paragraph [ref=e128]: 创建任务后展示正式预览编排
+            - generic [ref=e130]:
+              - img [ref=e131]
+              - generic [ref=e134]: 等待创作任务
+              - generic [ref=e135]: 选择剧本并触发一键成片后，这里会展示真实时间轴预览、字幕安全区和分镜状态。
+          - generic [ref=e136]:
+            - generic [ref=e137]:
+              - generic [ref=e138]:
+                - heading "当前创作" [level=3] [ref=e139]
+                - paragraph [ref=e140]: 还没有创作记录
+              - generic [ref=e142]: 还没有与当前剧本关联的创作任务。
+            - generic [ref=e143]:
+              - generic [ref=e144]:
+                - heading "分镜局部操作" [level=3] [ref=e145]
+                - paragraph [ref=e146]: 先从左侧时间轴选择一个分镜
+              - generic [ref=e147]:
+                - generic [ref=e148]:
+                  - text: 替换切片 ID
+                  - textbox "替换切片 ID" [disabled] [ref=e149]:
+                    - /placeholder: 输入新的 slice_id
+                - button "替换并重渲染" [disabled]:
+                  - img
+                  - text: 替换并重渲染
+            - generic [ref=e150]:
+              - generic [ref=e151]:
+                - heading "同剧本历史创作" [level=3] [ref=e152]
+                - paragraph [ref=e153]: 0 条记录
+              - generic [ref=e155]: 当前剧本还没有创作历史。

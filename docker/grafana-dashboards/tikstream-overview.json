@@ -1,0 +1,170 @@
+{
+  "annotations": { "list": [] },
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 0,
+  "id": null,
+  "links": [],
+  "panels": [
+    {
+      "datasource": { "type": "prometheus", "uid": "tikstream-prometheus" },
+      "fieldConfig": {
+        "defaults": { "color": { "mode": "palette-classic" }, "unit": "reqps" }
+      },
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 0 },
+      "id": 1,
+      "options": { "legend": { "displayMode": "table", "placement": "bottom" } },
+      "targets": [
+        { "expr": "sum(rate(tikstream_http_requests_total[1m])) by (path)", "legendFormat": "{{path}}" }
+      ],
+      "title": "HTTP 请求速率 (QPS)",
+      "type": "timeseries"
+    },
+    {
+      "datasource": { "type": "prometheus", "uid": "tikstream-prometheus" },
+      "fieldConfig": { "defaults": { "unit": "s" } },
+      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 0 },
+      "id": 2,
+      "options": { "legend": { "displayMode": "table", "placement": "bottom" } },
+      "targets": [
+        { "expr": "histogram_quantile(0.50, sum(rate(tikstream_http_request_duration_seconds_bucket[5m])) by (le, path))", "legendFormat": "P50 {{path}}" },
+        { "expr": "histogram_quantile(0.95, sum(rate(tikstream_http_request_duration_seconds_bucket[5m])) by (le, path))", "legendFormat": "P95 {{path}}" },
+        { "expr": "histogram_quantile(0.99, sum(rate(tikstream_http_request_duration_seconds_bucket[5m])) by (le, path))", "legendFormat": "P99 {{path}}" }
+      ],
+      "title": "HTTP 请求延迟 P50/P95/P99",
+      "type": "timeseries"
+    },
+    {
+      "datasource": { "type": "prometheus", "uid": "tikstream-prometheus" },
+      "fieldConfig": {
+        "defaults": {
+          "color": { "mode": "thresholds" },
+          "thresholds": { "mode": "absolute", "steps": [{ "color": "green", "value": null }, { "color": "orange", "value": 0.01 }, { "color": "red", "value": 0.05 }] },
+          "unit": "percentunit",
+          "min": 0,
+          "max": 1
+        }
+      },
+      "gridPos": { "h": 4, "w": 6, "x": 0, "y": 8 },
+      "id": 3,
+      "options": { "colorMode": "background", "graphMode": "area", "textMode": "value" },
+      "targets": [
+        { "expr": "sum(rate(tikstream_http_requests_total{status=~\"5..\"}[5m])) / sum(rate(tikstream_http_requests_total[5m]))", "legendFormat": "5xx 错误率" }
+      ],
+      "title": "HTTP 5xx 错误率",
+      "type": "stat"
+    },
+    {
+      "datasource": { "type": "prometheus", "uid": "tikstream-prometheus" },
+      "fieldConfig": {
+        "defaults": {
+          "color": { "mode": "thresholds" },
+          "thresholds": { "mode": "absolute", "steps": [{ "color": "green", "value": null }, { "color": "orange", "value": 0.05 }, { "color": "red", "value": 0.15 }] },
+          "unit": "percentunit",
+          "min": 0,
+          "max": 1
+        }
+      },
+      "gridPos": { "h": 4, "w": 6, "x": 6, "y": 8 },
+      "id": 4,
+      "options": { "colorMode": "background", "graphMode": "area", "textMode": "value" },
+      "targets": [
+        { "expr": "sum(rate(tikstream_creation_failures_total[5m])) / sum(rate(tikstream_creation_requests_total[5m]))", "legendFormat": "创作失败率" }
+      ],
+      "title": "创作失败率",
+      "type": "stat"
+    },
+    {
+      "datasource": { "type": "prometheus", "uid": "tikstream-prometheus" },
+      "fieldConfig": { "defaults": { "color": { "mode": "palette-classic" }, "unit": "short" } },
+      "gridPos": { "h": 4, "w": 6, "x": 12, "y": 8 },
+      "id": 5,
+      "options": { "colorMode": "background", "graphMode": "area", "textMode": "value_and_name" },
+      "targets": [
+        { "expr": "sum(rate(tikstream_creation_requests_total[1m]))", "legendFormat": "创作请求/分钟" }
+      ],
+      "title": "创作吞吐量",
+      "type": "stat"
+    },
+    {
+      "datasource": { "type": "prometheus", "uid": "tikstream-prometheus" },
+      "fieldConfig": { "defaults": { "color": { "mode": "palette-classic" }, "unit": "short" } },
+      "gridPos": { "h": 4, "w": 6, "x": 18, "y": 8 },
+      "id": 6,
+      "options": { "colorMode": "background", "graphMode": "area", "textMode": "value_and_name" },
+      "targets": [
+        { "expr": "sum(tikstream_http_requests_total)", "legendFormat": "总请求数(累计)" }
+      ],
+      "title": "累计总请求",
+      "type": "stat"
+    },
+    {
+      "datasource": { "type": "prometheus", "uid": "tikstream-prometheus" },
+      "fieldConfig": {
+        "defaults": { "color": { "mode": "palette-classic" }, "unit": "s" }
+      },
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 12 },
+      "id": 7,
+      "options": {
+        "calculate": false,
+        "color": { "mode": "opacity" },
+        "yAxis": { "format": "s", "logBase": 2 },
+        "legend": { "show": true }
+      },
+      "targets": [
+        { "expr": "sum(rate(tikstream_script_generate_duration_seconds_bucket[5m])) by (le, mode)", "format": "heatmap", "legendFormat": "{{le}}" }
+      ],
+      "title": "脚本生成耗时分布 (Heatmap)",
+      "type": "heatmap"
+    },
+    {
+      "datasource": { "type": "prometheus", "uid": "tikstream-prometheus" },
+      "fieldConfig": { "defaults": { "color": { "mode": "palette-classic" }, "unit": "short" } },
+      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 12 },
+      "id": 8,
+      "options": { "legend": { "displayMode": "table", "placement": "right" }, "reduceOptions": { "values": false, "calcs": ["sum"] } },
+      "targets": [
+        { "expr": "sum(rate(tikstream_creation_stage_transitions_total[1h])) by (stage)", "legendFormat": "{{stage}}" }
+      ],
+      "title": "创作阶段分布",
+      "type": "piechart"
+    },
+    {
+      "datasource": { "type": "prometheus", "uid": "tikstream-prometheus" },
+      "fieldConfig": { "defaults": { "color": { "mode": "palette-classic" }, "unit": "bytes" } },
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 20 },
+      "id": 9,
+      "options": { "legend": { "displayMode": "table", "placement": "bottom" } },
+      "targets": [
+        { "expr": "tikstream_nodejs_heap_size_used_bytes", "legendFormat": "堆已用" },
+        { "expr": "tikstream_nodejs_heap_size_total_bytes", "legendFormat": "堆总量" },
+        { "expr": "tikstream_nodejs_external_memory_bytes", "legendFormat": "外部内存" }
+      ],
+      "title": "Node.js 内存使用",
+      "type": "timeseries"
+    },
+    {
+      "datasource": { "type": "prometheus", "uid": "tikstream-prometheus" },
+      "fieldConfig": { "defaults": { "color": { "mode": "palette-classic" }, "unit": "percentunit", "min": 0, "max": 1 } },
+      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 20 },
+      "id": 10,
+      "options": { "legend": { "displayMode": "table", "placement": "bottom" } },
+      "targets": [
+        { "expr": "sum(rate(tikstream_doubao_api_calls_total{status=\"error\"}[5m])) / sum(rate(tikstream_doubao_api_calls_total[5m]))", "legendFormat": "Doubao 错误率" },
+        { "expr": "sum(rate(tikstream_seedance_api_calls_total{status=\"error\"}[5m])) / sum(rate(tikstream_seedance_api_calls_total[5m]))", "legendFormat": "Seedance 错误率" }
+      ],
+      "title": "AI API 错误率",
+      "type": "timeseries"
+    }
+  ],
+  "refresh": "30s",
+  "schemaVersion": 39,
+  "tags": ["tikstream", "overview"],
+  "templating": { "list": [] },
+  "time": { "from": "now-1h", "to": "now" },
+  "timepicker": {},
+  "timezone": "browser",
+  "title": "TikStream AI 总览",
+  "uid": "tikstream-overview",
+  "version": 1
+}

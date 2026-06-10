@@ -1,0 +1,87 @@
+{
+  "title": "早八/出差党必入！无线智能卷发棒5分钟搞定氛围感造型",
+  "video_duration": 14.3,
+  "style_vibe": "clean-tech简约科技风，轻快高效，突出轻量质感与实用属性，搭配热门轻快电子pop BGM",
+  "shots": [
+    {
+      "shot_index": 1,
+      "duration": 3,
+      "scene_description_query": "年轻女性着急扯卷发棒缠绕的电线、翻行李箱塞不下笨重卷发棒的快切画面",
+      "visual_description": "近景快切两个痛点场景：女生皱眉扯缠在一起的卷发棒电线，另一个画面是行李箱塞满化妆品塞不下大体积卷发棒，暖光居家/酒店场景",
+      "camera_movement": "固定",
+      "transition_type": "切出",
+      "voiceover_text": "赶时间、出差做造型还在被电线和笨重卷发棒折磨？",
+      "subtitle_text": "做造型太麻烦？",
+      "safe_zone_bounding_box": [
+        0.1,
+        0.7,
+        0.9,
+        0.9
+      ]
+    },
+    {
+      "shot_index": 2,
+      "duration": 2.8,
+      "scene_description_query": "浅银灰磨砂质感智能无线卷发棒放在白色干净桌面的特写",
+      "visual_description": "女生的手把巴掌大的浅银灰磨砂卷发棒放在纯白色桌面，特写产品表面的简约logo，冷调补光突出科技质感",
+      "camera_movement": "推近",
+      "transition_type": "淡入",
+      "voiceover_text": "试试这款智能无线卷发棒Pro",
+      "subtitle_text": "救星来了✨",
+      "safe_zone_bounding_box": [
+        0.1,
+        0.7,
+        0.9,
+        0.9
+      ]
+    },
+    {
+      "shot_index": 3,
+      "duration": 3,
+      "scene_description_query": "手指按卷发棒控温键亮灯、type-c口快充提示、手碰卷发棒外壳、卷完的光泽感发尾的快切画面",
+      "visual_description": "快速闪切四个画面：1.手指点按控温键亮起3档不同温度灯效 2.type-c接口旁弹出10分钟快充的文字提示 3.手指触碰卷发棒外壳无躲闪动作 4.卷完的光泽感发尾特写，搭配卷发滋滋ASMR音效",
+      "camera_movement": "固定",
+      "transition_type": "闪切",
+      "voiceover_text": "3档控温不伤发，10分钟快充续航全天，防烫设计超安全",
+      "subtitle_text": "控温不伤发|快充长续航|防烫安全",
+      "safe_zone_bounding_box": [
+        0.1,
+        0.7,
+        0.9,
+        0.9
+      ]
+    },
+    {
+      "shot_index": 4,
+      "duration": 2.5,
+      "scene_description_query": "迷你卷发棒被塞进随身斜挎包、女生在咖啡店用卷发棒补造型的画面",
+      "visual_description": "特写卷发棒被轻松塞进迷你斜挎包，完全不占空间，紧接着切女生在户外咖啡店随手拿出卷发棒补做刘海造型的画面",
+      "camera_movement": "跟拍",
+      "transition_type": "滑动转场",
+      "voiceover_text": "无线便携，出门随行随用",
+      "subtitle_text": "无线便携 随时随地做造型",
+      "safe_zone_bounding_box": [
+        0.1,
+        0.7,
+        0.9,
+        0.9
+      ]
+    },
+    {
+      "shot_index": 5,
+      "duration": 3,
+      "scene_description_query": "左右分屏对比毛躁直发和蓬松氛围感卷发、女生举着卷发棒微笑、下方弹出购物小黄车弹窗",
+      "visual_description": "屏幕左半部分展示之前毛躁扁塌的直发，右半部分展示卷完的蓬松亮泽大波浪，女生对着镜头晃了晃手里的卷发棒微笑，屏幕下方弹出小黄车购物弹窗",
+      "camera_movement": "固定",
+      "transition_type": "无",
+      "voiceover_text": "现在下单还送专属收纳袋哦",
+      "subtitle_text": "点击小黄车立即入手✅",
+      "safe_zone_bounding_box": [
+        0.1,
+        0.7,
+        0.9,
+        0.9
+      ]
+    }
+  ]
+}

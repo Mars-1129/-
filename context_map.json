@@ -1,0 +1,386 @@
+{
+  "$schema": "TikStream AI Context Map v4.3",
+  "project": {
+    "name": "TikStream AI",
+    "description": "电商场景 AIGC 带货视频生成系统",
+    "repository_root": "e:/aigc/-",
+    "monorepo": "pnpm workspace",
+    "tech_stack": {
+      "frontend": ["React18", "TypeScript5", "Vite5", "shadcn/ui", "TailwindCSS", "Zustand4", "Remotion4", "ECharts5"],
+      "backend": ["NestJS10", "Node.js22", "Prisma5", "BullMQ5", "MinioV8", "Sharp"],
+      "infra": ["PostgreSQL16", "Redis7", "Qdrant", "MinIO", "DuckDB", "Docker", "GitHubActions"],
+      "ai": ["Doubao-Seed-2.0-pro", "Doubao-Seedance-1.5-pro", "MetaImageBind", "F5-TTS", "YOLOv11", "HTDemucs", "Faster-Whisper"],
+      "media": ["FFmpeg6", "FFprobe", "Decord", "TransNetV2", "HeadlessChromium"]
+    }
+  },
+  "breakpoint": {
+    "current_focus": "Creation 模块 — 任务失败重试 (POST /api/v1/creations/:creation_id/retry) — P1：仅FAILED状态可重试 → 重置status=PENDING+current_stage=QUEUE_ALLOCATION+progress=0 → 重新BullMQ入队 → 返回新的creation_id+task_id+status — Creation 模块 4/4 端点完成",
+    "status": "NOT_STARTED",
+    "module_progress": "Creation 模块 4/4 端点完成 (里程碑)",
+    "completed_tasks": [
+      {
+        "id": "task-001",
+        "name": "初始化真理源建立",
+        "status": "COMPLETED",
+        "summary": "创建 .cursorrules / manifesto.md / context_map.json / prisma/schema.prisma / shared/api_types.ts",
+        "completed_at": "2026-05-23T00:00:00Z"
+      },
+      {
+        "id": "task-002",
+        "name": "快速模式剧本生成 (POST /api/v1/scripts/generate/quick)",
+        "owner": "人员B",
+        "module": "Script",
+        "priority": "P0",
+        "status": "COMPLETED",
+        "summary": "全链路实现: DTO校验 → Prompt构建 → Doubao-Seed-2.0-pro调用 → JSON解析 → Schema强校验 → P1合规词法拦截 → Prisma事务持久化 → 统一响应包装",
+        "completed_at": "2026-05-23T12:00:00Z",
+        "test_coverage": "tests/script_quick_generate.spec.ts — 52条测试用例, 100% PASSED"
+      },
+      {
+        "id": "task-003",
+        "name": "剧本保存 (saveScript) + JSON Patch 分镜编辑 (patchScript)",
+        "owner": "人员B",
+        "module": "Script",
+        "priority": "P1",
+        "status": "COMPLETED",
+        "completed_at": "2026-05-23T18:00:00Z",
+        "test_coverage": "tests/script_save_patch.spec.ts — 54条测试用例, 100% PASSED"
+      },
+      {
+        "id": "task-004",
+        "name": "剧本详情查询 (GET /api/v1/scripts/:script_id)",
+        "owner": "人员B",
+        "module": "Script",
+        "priority": "P0",
+        "status": "COMPLETED",
+        "completed_at": "2026-05-23T22:00:00Z",
+        "test_coverage": "tests/script_get_detail.spec.ts — 32条测试用例, 100% PASSED"
+      },
+      {
+        "id": "task-005",
+        "name": "快速模式剧本生成 - 全栈重构完成",
+        "owner": "人员B",
+        "module": "Script",
+        "priority": "P0",
+        "status": "COMPLETED",
+        "completed_at": "2026-05-24T00:00:00Z",
+        "test_coverage": "tests/script_quick_generate.spec.ts — 52条测试用例, 100% PASSED"
+      },
+      {
+        "id": "task-006",
+        "name": "音节配时校验 (validateTiming)",
+        "owner": "人员B",
+        "module": "Script",
+        "priority": "P1",
+        "status": "COMPLETED",
+        "completed_at": "2026-05-24T06:00:00Z",
+        "test_coverage": "tests/script_validate_timing.spec.ts — 64条测试用例, 100% PASSED"
+      },
+      {
+        "id": "task-007",
+        "name": "爆款仿写剧本生成 (POST /api/v1/scripts/generate/viral-rewrite)",
+        "owner": "人员B",
+        "module": "Script",
+        "priority": "P0",
+        "status": "COMPLETED",
+        "completed_at": "2026-05-24T12:00:00Z",
+        "test_coverage": "tests/script_viral_rewrite_generate.spec.ts — 70条测试用例, 100% PASSED"
+      },
+      {
+        "id": "task-008",
+        "name": "模板驱动剧本生成 (POST /api/v1/scripts/generate/template)",
+        "owner": "人员B",
+        "module": "Script",
+        "priority": "P0",
+        "status": "COMPLETED",
+        "completed_at": "2026-05-24T18:00:00Z",
+        "test_coverage": "tests/script_template_generate.spec.ts — 63条测试用例, 100% PASSED"
+      },
+      {
+        "id": "task-009",
+        "name": "Template CRUD 接口",
+        "owner": "人员B",
+        "module": "Template",
+        "priority": "P0",
+        "status": "COMPLETED",
+        "completed_at": "2026-05-24T20:00:00Z",
+        "test_coverage": "tests/template_crud.spec.ts — 56条测试用例, 100% PASSED"
+      },
+      {
+        "id": "task-010",
+        "name": "Viral Video Analysis CRUD 接口",
+        "owner": "人员B",
+        "module": "ViralAnalysis",
+        "priority": "P1",
+        "status": "COMPLETED",
+        "completed_at": "2026-05-24T22:00:00Z",
+        "test_coverage": "tests/viral_analysis_crud.spec.ts — 51条测试用例, 100% PASSED"
+      },
+      {
+        "id": "task-011",
+        "name": "Analytics 留存曲线查询接口 (GET /api/v1/analytics/retention-curve)",
+        "owner": "人员B",
+        "module": "Analytics",
+        "priority": "P1",
+        "status": "COMPLETED",
+        "completed_at": "2026-05-25T12:00:00Z",
+        "test_coverage": "tests/analytics_retention_curve.spec.ts — 62条测试用例, 100% PASSED"
+      },
+      {
+        "id": "task-012",
+        "name": "Analytics 风格因子热力图查询接口 (GET /api/v1/analytics/style-factors)",
+        "owner": "人员B",
+        "module": "Analytics",
+        "priority": "P1",
+        "status": "COMPLETED",
+        "completed_at": "2026-05-25T14:00:00Z",
+        "test_coverage": "tests/analytics_style_factors.spec.ts — 59条测试用例, 100% PASSED"
+      },
+      {
+        "id": "task-013",
+        "name": "Analytics 视听留存桑基图查询接口 (GET /api/v1/analytics/audio-visual-sankey)",
+        "owner": "人员B",
+        "module": "Analytics",
+        "priority": "P1",
+        "status": "COMPLETED",
+        "completed_at": "2026-05-25T18:00:00Z",
+        "test_coverage": "tests/analytics_audio_visual_sankey.spec.ts — 58条测试用例, 100% PASSED"
+      },
+      {
+        "id": "task-014",
+        "name": "Analytics AB对比查询接口 (GET /api/v1/analytics/ab-compare)",
+        "owner": "人员B",
+        "module": "Analytics",
+        "priority": "P1",
+        "status": "COMPLETED",
+        "completed_at": "2026-05-25T22:00:00Z",
+        "test_coverage": "tests/analytics_ab_compare.spec.ts — 65条测试用例, 100% PASSED"
+      },
+      {
+        "id": "task-015",
+        "name": "Analytics 一键自愈建议回写链路 (POST /api/v1/analytics/self-heal)",
+        "owner": "人员B",
+        "module": "Analytics",
+        "priority": "P1",
+        "status": "COMPLETED",
+        "completed_at": "2026-05-25T23:59:59Z",
+        "test_coverage": "tests/analytics_self_heal.spec.ts — 71条测试用例, 100% PASSED"
+      },
+      {
+        "id": "task-016",
+        "name": "Material 素材上传与结构化入库 (POST /api/v1/materials/upload)",
+        "owner": "人员B",
+        "module": "Material",
+        "priority": "P0",
+        "status": "COMPLETED",
+        "completed_at": "2026-05-25T23:59:59Z",
+        "test_coverage": "tests/material_upload.spec.ts — 68条测试用例, 100% PASSED"
+      },
+      {
+        "id": "task-017",
+        "name": "Material 素材切片与 Dense Caption 语义打标 (gpu-slicing-worker 全链路)",
+        "owner": "人员A (人员B辅助)",
+        "module": "Material",
+        "priority": "P0",
+        "status": "COMPLETED",
+        "summary": "gpu-slicing-worker 全链路: 10新建文件/9修改文件/18原子函数F0~F18/7新错误码 → 67条测试 100% PASSED",
+        "completed_at": "2026-05-25T23:59:59Z",
+        "test_coverage": "tests/material_slicer.spec.ts — 67条测试用例, 100% PASSED"
+      },
+      {
+        "id": "task-018",
+        "name": "Material 素材列表查询 (GET /api/v1/materials) — cursor 游标分页 + 多维度筛选",
+        "owner": "人员A",
+        "module": "Material",
+        "priority": "P0",
+        "status": "COMPLETED",
+        "summary": "83条测试 100% PASSED, 1端点, 10原子函数, 1新建+4修改文件",
+        "completed_at": "2026-05-26T00:00:00Z",
+        "test_coverage": "tests/material_list.spec.ts — 83条测试用例, 100% PASSED"
+      },
+      {
+        "id": "task-019",
+        "name": "Material 素材详情查询 (GET /api/v1/materials/:material_id)",
+        "owner": "人员A",
+        "module": "Material",
+        "priority": "P0",
+        "status": "COMPLETED",
+        "summary": "64条测试 100% PASSED, 1端点, 3原子函数, 2修改文件",
+        "completed_at": "2026-05-26T12:00:00Z",
+        "test_coverage": "tests/material_detail.spec.ts — 64条测试用例, 100% PASSED"
+      },
+      {
+        "id": "task-020",
+        "name": "Material 素材删除 (DELETE /api/v1/materials/:material_id)",
+        "owner": "人员A",
+        "module": "Material",
+        "priority": "P0",
+        "status": "COMPLETED",
+        "summary": "61条测试 100% PASSED, 1端点, 6原子函数, 1新错误码 MATERIAL_DELETE_CONFLICT, 4修改文件",
+        "completed_at": "2026-05-26T18:00:00Z",
+        "test_coverage": "tests/material_delete.spec.ts — 61条测试用例, 100% PASSED"
+      },
+      {
+        "id": "task-021",
+        "name": "Material 素材多维检索 (POST /api/v1/materials/search)",
+        "owner": "人员A",
+        "module": "Material",
+        "priority": "P1",
+        "status": "COMPLETED",
+        "summary": "59条测试 100% PASSED, 1端点, 8原子函数, 3新建+4修改文件 + 2新 AI 服务 (Qdrant + ImageBind)",
+        "completed_at": "2026-05-27T06:00:00Z",
+        "test_coverage": "tests/material_search.spec.ts — 59条测试用例, 100% PASSED"
+      },
+      {
+        "id": "task-022",
+        "name": "Material 素材重新处理 (POST /api/v1/materials/:material_id/reprocess)",
+        "owner": "人员A",
+        "module": "Material",
+        "priority": "P1",
+        "status": "COMPLETED",
+        "summary": "51条测试 100% PASSED, 1端点, 5原子函数, 3修改文件",
+        "completed_at": "2026-05-27T18:00:00Z",
+        "test_coverage": "tests/material_reprocess.spec.ts — 51条测试用例, 100% PASSED"
+      },
+      {
+        "id": "task-023",
+        "name": "Creation 一键成片创作任务发起 (POST /api/v1/creations)",
+        "owner": "人员A",
+        "module": "Creation",
+        "priority": "P0",
+        "status": "COMPLETED",
+        "summary": "P0 核心主链路入口 HTTP 层全量实现: 7新建文件/4修改文件/9原子函数F0~F6+G0~G2/1新错误码 → 61条测试 100% PASSED",
+        "completed_at": "2026-05-27T23:59:59Z",
+        "test_coverage": "tests/creation_create.spec.ts — 61条测试用例, 100% PASSED"
+      },
+      {
+        "id": "task-024",
+        "name": "Creation 任务详情查询 (GET /api/v1/creations/:creation_id)",
+        "owner": "人员A",
+        "module": "Creation",
+        "priority": "P0",
+        "status": "COMPLETED",
+        "summary": "P0 核心查询端点: 4修改文件/4原子函数F7+H0+H1+H2/0新错误码 → 63条测试 100% PASSED",
+        "completed_at": "2026-05-27T23:59:59Z",
+        "test_coverage": "tests/creation_detail.spec.ts — 63条测试用例, 100% PASSED"
+      },
+      {
+        "id": "task-025",
+        "name": "Creation 主动取消任务 (POST /api/v1/creations/:creation_id/cancel)",
+        "owner": "人员A",
+        "module": "Creation",
+        "priority": "P1",
+        "status": "COMPLETED",
+        "summary": "P1 取消端点全量实现: 4修改文件/5原子函数/0新错误码(全部复用)/6类Swagger注解 → 61条测试 100% PASSED",
+        "completed_at": "2026-05-27T23:59:59Z",
+        "test_coverage": "tests/creation_cancel.spec.ts — 61条测试用例, 100% PASSED"
+      },
+      {
+        "id": "task-026",
+        "name": "Creation 任务列表查询 (GET /api/v1/creations)",
+        "owner": "人员A",
+        "module": "Creation",
+        "priority": "P1",
+        "status": "COMPLETED",
+        "summary": "P1 列表查询端点全量实现: 1新建文件/4修改文件/8原子函数(J1/K0/K1/L0/L1/L2/L4/L5)/0新错误码(全部复用INVALID_REQUEST+INTERNAL_SERVER_ERROR)/7类Swagger Query注解+3类Response注解 → 70条测试 100% PASSED",
+        "completed_at": "2026-05-27T23:59:59Z",
+        "test_coverage": "tests/creation_list.spec.ts — 70条测试用例, 100% PASSED",
+        "files_modified": [
+          "apps/server-gateway/src/creation/dto/list-creations.dto.ts (新建: 7字段 Query DTO + class-validator + @ApiProperty/@ApiPropertyOptional 全注解)",
+          "apps/server-gateway/src/creation/creation.constants.ts (+27行: CREATION_LIST_DEFAULTS DEFAULT_LIMIT=20/MAX_LIMIT=100 + CREATION_LIST_ERROR_MESSAGES 8条模板化错误消息)",
+          "apps/server-gateway/src/creation/creation.repository.ts (+193行: 4导出接口 CreationListFilter/DecodedCreationCursor/CreationRow/PaginatedCreationResult + J1 findCreationsPaginated buildCreationListWhere + K0 encodeCreationCursor + K1 decodeCreationCursor)",
+          "apps/server-gateway/src/creation/creation.service.ts (+280行: 3导出接口 CreationListItem/CursorPageInfo/CreationListResponse + L0 listCreations主编排 + L1 resolveListDefaults + L2 buildListFilter + L4 mapToCreationListItem + L5 buildPageInfo)",
+          "apps/server-gateway/src/creation/creation.controller.ts (+163行: @Get()端点 + 7个@ApiQuery + @ApiOkResponse/@ApiBadRequestResponse/@ApiInternalServerErrorResponse + trace_id注入 + buildApiErrorResponse统一包装)"
+        ],
+        "atomic_functions_completed": [
+          "J1 findCreationsPaginated (Repository: Prisma creation.findMany where+orderBy createdAt DESC/id DESC + take limit+1 cursor/skip + count非阻断 -1降级 + has_more截断 + encodeCursor next_cursor)",
+          "K0 encodeCreationCursor (Repository: {v: item.createdAt.toISOString(), i: item.id} → Buffer base64url)",
+          "K1 decodeCreationCursor (Repository: base64url解码→JSON.parse→校验i/v字段存在性→任一失败logger.warn+return null降级首页)",
+          "L0 listCreations (Service主编排: resolveListDefaults→buildListFilter→decodeCursor→findCreationsPaginated→mapToCreationListItem×N→buildPageInfo→logger记录)",
+          "L1 resolveListDefaults (Service: productId非空+trim校验→INVALID_REQUEST 400 / limit整数1~100→INVALID_REQUEST 400 / 默认limit=20)",
+          "L2 buildListFilter (Service: status∈VALID_CREATION_STATUSES/current_stage∈VALID_CREATION_STAGES/engine_mode=SCRIPT_DRIVEN/export_format∈MP4|MOV|WEBM → 非法值INVALID_REQUEST 400 + details内含field+received)",
+          "L4 mapToCreationListItem (Service: Prisma camelCase→API snake_case 全19字段映射, BigInt→Number, Date→ISO8601, null保留, 不含shot_renders)",
+          "L5 buildPageInfo (Service: 纯组装 {cursor, has_more, total_count})"
+        ],
+        "error_codes_covered": [
+          "INVALID_REQUEST (400, non-retryable, product_id缺失/空/null/undefined / limit=0/-1/101/2.5 / status非法 / current_stage非法 / engine_mode非法 / export_format非法 → details含field+received精确定位)",
+          "INTERNAL_SERVER_ERROR (500, retryable, Prisma P1001/P1017/P2024/P2028/INIT_ERROR/RUST_PANIC/P9999/原生Error — findMany全链路覆盖)"
+        ],
+        "key_design_decisions": [
+          "排序固定 createdAt DESC + id DESC (tie-breaker), 不暴露sort_by/sort_order参数",
+          "列表项仅含19字段不含shot_renders (详情接口才返回完整ShotRender子表)",
+          "product_id不做存在性校验, 仅WHERE过滤 (无匹配返回空列表 items=[])",
+          "Cursor格式沿用Material模块: {v: ISO8601, i: UUID} base64url, 不另创格式",
+          "Prisma count失败非阻断: 退化为total_count=-1不中断主流程",
+          "零新增ErrorCode: INVALID_REQUEST/INTERNAL_SERVER_ERROR全部复用已有枚举",
+          "常量集中化: CREATION_LIST_DEFAULTS + CREATION_LIST_ERROR_MESSAGES模板化文案",
+          "Controller层3类Swagger注解: @ApiOkResponse/@ApiBadRequestResponse/@ApiInternalServerErrorResponse"
+        ]
+      }
+    ],
+    "milestones": {
+      "Script模块6/6完成": "task-008 → 全部端点+校验+合规+配时 完成",
+      "Template CRUD完成": "task-009 → 6端点 完成",
+      "ViralAnalysis CRUD完成": "task-010 → 2端点 完成",
+      "Analytics模块5/5完成": "task-015 → 留存曲线+热力图+桑基图+AB对比+自愈 全部端点完成",
+      "Material模块6/6完成": "task-022 → 上传+列表+详情+删除+检索+重处理 全部端点+Worker完成",
+      "Creation模块启动": "task-023 → POST /api/v1/creations 一键成片入口完成",
+      "Creation详情查询完成": "task-024 → GET /api/v1/creations/:creation_id 详情查询完成, 2/4端点",
+      "Creation主动取消完成": "task-025 → POST /api/v1/creations/:creation_id/cancel 取消端点完成, 3/4端点",
+      "Creation任务列表查询完成": "task-026 → GET /api/v1/creations 列表查询完成, 4/4端点",
+      "Creation模块4/4完成 [里程碑]": "task-026 → 一键成片 + 详情查询 + 主动取消 + 列表查询 全部端点完成"
+    },
+    "version_history": {
+      "v3.0": "task-001~task-015 完成: 项目初始化 + Script/Analytics 模块全部完成 → 断点: Material 素材上传",
+      "v3.1": "task-016 完成: Material 素材上传 (68测试, 14原子函数, 4新错误码, 11新建文件, 3修改文件) → Material 模块 1/6 端点完成 → 断点: 素材切片与打标",
+      "v3.2": "task-017 完成: Material 素材切片与 Dense Caption (67测试, 18原子函数, 7新错误码, 12新建文件, 9修改文件) → gpu-slicing-worker 全链路贯通 [里程碑]",
+      "v3.3": "task-018 完成: Material 素材列表查询 (83测试, 10原子函数, 1新建+4修改文件) → 断点: 素材详情查询",
+      "v3.4": "task-019 完成: Material 素材详情查询 (64测试, 3原子函数, 2修改文件) → 断点: 素材删除",
+      "v3.5": "task-020 完成: Material 素材删除 (61测试, 6原子函数, 1新错误码, 4修改文件) → 断点: 素材多维检索",
+      "v3.6": "task-021 完成: Material 素材多维检索 (59测试, 8原子函数, Qdrant+ImageBind双AI服务) → Material 模块 5/6 端点 → 断点: 素材重新处理",
+      "v3.7": "task-022 完成: Material 素材重新处理 (51测试, 5原子函数, 3修改文件) → Material 模块 6/6 全部完成 [里程碑] → 断点: Creation 一键成片",
+      "v3.8": "task-023 完成: Creation 一键成片 (61测试, 9原子函数, 7新建+4修改文件, 1新错误码) → Creation 模块 1/4 端点 → 断点: 任务详情查询",
+      "v4.0": "task-024 完成: Creation 任务详情查询 (63测试, 4原子函数, 4修改文件, 0新错误码) → Creation 模块 2/4 端点 → 断点: 主动取消任务",
+      "v4.1": "task-025 完成: Creation 主动取消任务 (61测试, 5原子函数, 4修改文件, 0新错误码全部复用) → Creation 模块 3/4 端点 → 断点: 任务列表查询",
+      "v4.2": "task-026 完成: Creation 任务列表查询 (70测试, 8原子函数, 1新建+4修改文件, 0新错误码全部复用) → Creation 模块 4/4 全部完成 [里程碑] → 断点: 任务失败重试"
+    },
+    "pending_tasks": [
+      {
+        "id": "task-027",
+        "name": "Creation 任务失败重试 (POST /api/v1/creations/:creation_id/retry)",
+        "owner": "人员A",
+        "module": "Creation",
+        "priority": "P1",
+        "status": "NOT_STARTED",
+        "summary": "重新入队失败的创作任务: 仅FAILED状态可重试 → 重置status=PENDING+current_stage=QUEUE_ALLOCATION+progress=0 → 重新BullMQ入队 → 返回creation_id+task_id+status"
+      },
+      {
+        "id": "task-028",
+        "name": "Creation SSE 长任务进度推送 (GET /api/v1/creations/:creation_id/progress)",
+        "owner": "人员A/公共",
+        "module": "Creation/Common",
+        "priority": "P0",
+        "status": "NOT_STARTED",
+        "summary": "SSE推送creation任务实时进度: NestJS SSE端点 → CLS AsyncLocalStorage贯穿 → status/stage/progress流式推送"
+      },
+      {
+        "id": "task-029",
+        "name": "GPU Slicing Worker 阶段推进实现 (creation内部回调)",
+        "owner": "人员A",
+        "module": "Creation",
+        "priority": "P0",
+        "status": "NOT_STARTED",
+        "summary": "填充internal-creation.controller.ts 3个回调桩: G0 stage-callback/G1 export-callback/G2 failure-callback → Prisma更新Creation状态/阶段/进度/文件路径"
+      },
+      {
+        "id": "task-030",
+        "name": "Remotion Render Worker 实现",
+        "owner": "人员A",
+        "module": "Creation",
+        "priority": "P0",
+        "status": "NOT_STARTED",
+        "summary": "Remotion渲染Worker: BullMQ消费compose-video任务 → 分镜级增量渲染 SceneHash缓存 → 四轨合成 → 最终导出"
+      }
+    ]
+  }
+}

@@ -1,0 +1,243 @@
+- generic [ref=e4]:
+  - complementary [ref=e18]:
+    - generic [ref=e19]:
+      - generic [ref=e20]:
+        - img [ref=e22]
+        - generic [ref=e32]:
+          - generic [ref=e33]: TikStream AI
+          - generic [ref=e34]: 业务前端工作台
+      - generic [ref=e35]:
+        - generic [ref=e36]: 真实 API
+        - generic [ref=e37]: http://localhost:3000
+    - navigation [ref=e38]:
+      - link "素材工作台 上传、切片、检索" [ref=e39] [cursor=pointer]:
+        - /url: /materials
+        - generic [ref=e40]:
+          - img [ref=e41]
+          - generic [ref=e45]:
+            - generic [ref=e46]: 素材工作台
+            - generic [ref=e47]: 上传、切片、检索
+      - link "剧本编辑器 生成、Patch、校验" [ref=e48] [cursor=pointer]:
+        - /url: /scripts
+        - generic [ref=e49]:
+          - img [ref=e50]
+          - generic [ref=e52]:
+            - generic [ref=e53]: 剧本编辑器
+            - generic [ref=e54]: 生成、Patch、校验
+      - link "创作预览 预览、导出、重渲染" [ref=e55] [cursor=pointer]:
+        - /url: /create
+        - generic [ref=e56]:
+          - img [ref=e57]
+          - generic [ref=e60]:
+            - generic [ref=e61]: 创作预览
+            - generic [ref=e62]: 预览、导出、重渲染
+      - link "任务历史 进度、日志、重试" [ref=e63] [cursor=pointer]:
+        - /url: /tasks
+        - generic [ref=e64]:
+          - img [ref=e65]
+          - generic [ref=e68]:
+            - generic [ref=e69]: 任务历史
+            - generic [ref=e70]: 进度、日志、重试
+      - link "分析看板 归因、A/B、自愈" [ref=e71] [cursor=pointer]:
+        - /url: /analytics
+        - generic [ref=e72]:
+          - img [ref=e73]
+          - generic [ref=e76]:
+            - generic [ref=e77]: 分析看板
+            - generic [ref=e78]: 归因、A/B、自愈
+      - link "模板市场 模板详情与套用" [ref=e79] [cursor=pointer]:
+        - /url: /templates
+        - generic [ref=e80]:
+          - img [ref=e81]
+          - generic [ref=e85]:
+            - generic [ref=e86]: 模板市场
+            - generic [ref=e87]: 模板详情与套用
+    - generic [ref=e89]:
+      - generic [ref=e90]: 商品上下文
+      - generic [ref=e91]: TikStream 演示商品
+      - generic [ref=e92]: beauty · TKS-DEMO-SKU-001
+      - generic [ref=e93]:
+        - generic [ref=e94]: 15秒高转化短视频
+        - generic [ref=e95]: AI自动生成分镜
+        - generic [ref=e96]: 适配TikTok Shop
+  - generic [ref=e97]:
+    - banner [ref=e98]:
+      - generic [ref=e99]:
+        - generic [ref=e100]:
+          - generic [ref=e101]: 创作预览
+          - heading "预览、导出、重渲染" [level=1] [ref=e102]
+        - generic [ref=e103]:
+          - combobox [ref=e105]:
+            - option "TikStream 演示商品" [selected]
+          - button "刷新上下文" [ref=e106] [cursor=pointer]:
+            - img [ref=e107]
+            - text: 刷新上下文
+    - main [ref=e112]:
+      - generic [ref=e113]:
+        - generic [ref=e114]:
+          - generic [ref=e115]:
+            - heading "创作工作台" [level=3] [ref=e116]
+            - paragraph [ref=e117]: 基于真实 script / creation / task API 进行一键成片、Remotion 预览、局部重渲染与导出追踪。
+          - generic [ref=e118]:
+            - generic [ref=e119]:
+              - generic [ref=e120]:
+                - generic [ref=e121]: 当前商品
+                - generic [ref=e122]: TikStream 演示商品
+              - generic [ref=e123]:
+                - text: 剧本
+                - combobox "剧本" [ref=e124]:
+                  - option "请选择剧本"
+                  - option "15秒高转化短视频短视频脚本 · 15s" [selected]
+              - generic [ref=e125]:
+                - generic [ref=e126]:
+                  - text: 画幅
+                  - combobox "画幅" [ref=e127]:
+                    - option "9:16 · 1080x1920" [selected]
+                    - option "16:9 · 1920x1080"
+                - generic [ref=e128]:
+                  - text: 导出格式
+                  - combobox "导出格式" [ref=e129]:
+                    - option "MP4" [selected]
+                    - option "MOV"
+                    - option "WEBM"
+              - button "一键成片" [ref=e131] [cursor=pointer]:
+                - img [ref=e218]
+                - text: 一键成片
+            - generic [ref=e224]: 创作任务已创建：tsk_20260527_mpodpob3r5
+        - generic [ref=e137]:
+          - generic [ref=e138]:
+            - generic [ref=e139]:
+              - heading "分镜时间轴" [level=3] [ref=e140]
+              - paragraph [ref=e141]: 5 个分镜 · 15s
+            - generic [ref=e142]:
+              - button "Shot 1 3s 15秒高转化短视频 PENDING 未绑定切片 局部重渲染" [ref=e143] [cursor=pointer]:
+                - generic [ref=e144]:
+                  - generic [ref=e145]: Shot 1
+                  - generic [ref=e146]: 3s
+                - generic [ref=e147]: 15秒高转化短视频
+                - generic [ref=e148]:
+                  - generic [ref=e149]: PENDING
+                  - generic [ref=e150]: 未绑定切片
+                - button "局部重渲染" [ref=e225]:
+                  - img [ref=e226]
+                  - text: 局部重渲染
+              - button "Shot 2 3.5s AI自动生成分镜 PENDING 未绑定切片 局部重渲染" [ref=e151] [cursor=pointer]:
+                - generic [ref=e152]:
+                  - generic [ref=e153]: Shot 2
+                  - generic [ref=e154]: 3.5s
+                - generic [ref=e155]: AI自动生成分镜
+                - generic [ref=e156]:
+                  - generic [ref=e157]: PENDING
+                  - generic [ref=e158]: 未绑定切片
+                - button "局部重渲染" [ref=e228]:
+                  - img [ref=e229]
+                  - text: 局部重渲染
+              - button "Shot 3 3.5s 适配TikTok Shop PENDING 未绑定切片 局部重渲染" [ref=e159] [cursor=pointer]:
+                - generic [ref=e160]:
+                  - generic [ref=e161]: Shot 3
+                  - generic [ref=e162]: 3.5s
+                - generic [ref=e163]: 适配TikTok Shop
+                - generic [ref=e164]:
+                  - generic [ref=e165]: PENDING
+                  - generic [ref=e166]: 未绑定切片
+                - button "局部重渲染" [ref=e231]:
+                  - img [ref=e232]
+                  - text: 局部重渲染
+              - button "Shot 4 3s 核心信息一屏看懂 PENDING 未绑定切片 局部重渲染" [ref=e167] [cursor=pointer]:
+                - generic [ref=e168]:
+                  - generic [ref=e169]: Shot 4
+                  - generic [ref=e170]: 3s
+                - generic [ref=e171]: 核心信息一屏看懂
+                - generic [ref=e172]:
+                  - generic [ref=e173]: PENDING
+                  - generic [ref=e174]: 未绑定切片
+                - button "局部重渲染" [ref=e234]:
+                  - img [ref=e235]
+                  - text: 局部重渲染
+              - button "Shot 5 2s 继续查看商品详情 PENDING 未绑定切片 局部重渲染" [ref=e175] [cursor=pointer]:
+                - generic [ref=e176]:
+                  - generic [ref=e177]: Shot 5
+                  - generic [ref=e178]: 2s
+                - generic [ref=e179]: 继续查看商品详情
+                - generic [ref=e180]:
+                  - generic [ref=e181]: PENDING
+                  - generic [ref=e182]: 未绑定切片
+                - button "局部重渲染" [ref=e237]:
+                  - img [ref=e238]
+                  - text: 局部重渲染
+          - generic [ref=e183]:
+            - generic [ref=e184]:
+              - heading "Remotion 预览台" [level=3] [ref=e185]
+              - paragraph [ref=e186]: preview 2026-05-27T18:09:49.647Z · 1080 × 1920
+            - generic [ref=e240]:
+              - generic [ref=e243]:
+                - generic [ref=e245]:
+                  - generic [ref=e246]: TikStream Preview
+                  - generic [ref=e247]: 9:16
+                - generic [ref=e249]:
+                  - generic [ref=e250]:
+                    - generic [ref=e251]: 当前分镜
+                    - generic [ref=e252]: "Shot #1"
+                    - generic [ref=e253]: 当前分镜暂无渲染结果，将展示结构化占位预览
+                  - generic [ref=e254]:
+                    - generic [ref=e255]: 总时长：15.0s
+                    - generic [ref=e256]: 版本：18:09:49
+                    - generic [ref=e257]: 状态：PENDING
+                    - generic [ref=e258]: 阶段：QUEUE_ALLOCATION
+                - generic [ref=e260]: 15秒高转化短视频
+              - generic [ref=e262]:
+                - generic [ref=e263]:
+                  - button "Play video" [active] [ref=e264] [cursor=pointer]:
+                    - img [ref=e265]
+                  - button "Mute sound" [ref=e268] [cursor=pointer]:
+                    - img [ref=e269]
+                  - generic [ref=e271]: 0:00 / 0:15
+                - button "Enter Fullscreen" [ref=e273] [cursor=pointer]:
+                  - img [ref=e274]
+          - generic [ref=e194]:
+            - generic [ref=e195]:
+              - generic [ref=e196]:
+                - heading "当前创作" [level=3] [ref=e197]
+                - paragraph [ref=e198]: creation 2f0d5b44 · task tsk_20260527_mpodpob3r5
+              - generic [ref=e199]:
+                - generic [ref=e200]: PENDING · QUEUE_ALLOCATION
+                - generic [ref=e285]:
+                  - generic [ref=e286]: 进度
+                  - generic [ref=e287]: 0%
+                - generic [ref=e289]:
+                  - generic [ref=e290]: 开始时间：--
+                  - generic [ref=e291]: 更新时间：2026/5/28 02:09:49
+                  - generic [ref=e292]: 导出格式：MP4
+                - generic [ref=e293]:
+                  - button "触发导出" [ref=e294] [cursor=pointer]:
+                    - img [ref=e295]
+                    - text: 触发导出
+                  - button "失败后重试" [disabled]:
+                    - img
+                    - text: 失败后重试
+            - generic [ref=e201]:
+              - generic [ref=e202]:
+                - heading "分镜局部操作" [level=3] [ref=e203]
+                - paragraph [ref=e204]: 当前选中 Shot 1
+              - generic [ref=e205]:
+                - generic [ref=e206]:
+                  - text: 替换切片 ID
+                  - textbox "替换切片 ID" [ref=e207]:
+                    - /placeholder: 输入新的 slice_id
+                - button "替换并重渲染" [disabled]:
+                  - img
+                  - text: 替换并重渲染
+                - generic [ref=e208]:
+                  - generic [ref=e209]: 15秒高转化短视频
+                  - generic [ref=e210]: 素材切片：未绑定
+                  - generic [ref=e211]: 画面描述：产品主体快速出场，开场镜头直接聚焦 15秒高转化短视频，画面保持干净利落并突出 高转化 UGC 气质。
+            - generic [ref=e212]:
+              - generic [ref=e213]:
+                - heading "同剧本历史创作" [level=3] [ref=e214]
+                - paragraph [ref=e215]: 1 条记录
+              - button "2f0d5b44 0% PENDING · QUEUE_ALLOCATION 2026/5/28 02:09:49" [ref=e298] [cursor=pointer]:
+                - generic [ref=e299]:
+                  - generic [ref=e300]: 2f0d5b44
+                  - generic [ref=e301]: 0%
+                - generic [ref=e302]: PENDING · QUEUE_ALLOCATION
+                - generic [ref=e303]: 2026/5/28 02:09:49

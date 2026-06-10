@@ -1,0 +1,39 @@
+﻿npx : PASS tests/creation_list.spec.ts (7.232 s)
+所在位置 行:1 字符: 15
++ ... { $output = npx jest tests/creation_create.spec.ts tests/creation_det ...
++                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (PASS tests/crea...ec.ts (7.232 s) 
+   :String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+PASS tests/creation_detail.spec.ts (7.222 s)
+PASS tests/creation_create.spec.ts (7.284 s)
+FAIL tests/creation_cancel.spec.ts (7.339 s)
+  鈼?CreationCancel 鈥?涓诲姩鍙栨秷鍒涗綔浠诲姟 (POST /api/v1/creations/:creation_id/cancel) 
+鈥?銆愭€ц兘娴併€戣€楁椂鍗＄偣鍛婅 鈥?TC-CRE-CANCEL-PERF-002: validateCreationId (绾悓姝? 鍚堟硶 UU
+ID) 鈮?1ms
+
+    expect(received).toBeLessThanOrEqual(expected)
+
+    Expected: <= 1
+    Received:    1.9497000000010303
+
+    [0m [90m 1341 |[39m       [36mconst[39m elapsed [33m=[39m performanc
+e[33m.[39mnow() [33m-[39m start[33m;[39m
+     [90m 1342 |[39m
+    [31m[1m>[22m[39m[90m 1343 |[39m       expect(elapsed)[33m.[39mtoBeL
+essThanOrEqual([33mPERF_CEILING_MS[39m)[33m;[39m
+     [90m      |[39m                       [31m[1m^[22m[39m
+     [90m 1344 |[39m     })[33m;[39m
+     [90m 1345 |[39m
+     [90m 1346 |[39m     it([32m'TC-CRE-CANCEL-PERF-003: validateCreationId 
+澶辫触璺緞 (鎻愬墠杩斿洖) 鈮?0.5ms'[39m[33m,[39m () [33m=>[39m {[0m
+
+      at Object.<anonymous> (tests/creation_cancel.spec.ts:1343:23)
+
+Test Suites: 1 failed, 3 passed, 4 total
+Tests:       1 failed, 254 passed, 255 total
+Snapshots:   0 total
+Time:        10.071 s
+Ran all test suites matching /tests\\creation_create.spec.ts|tests\\creation_de
+tail.spec.ts|tests\\creation_cancel.spec.ts|tests\\creation_list.spec.ts/i.

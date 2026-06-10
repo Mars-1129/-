@@ -1,0 +1,7 @@
+4. [GET] http://localhost:3000/api/v1/creations?product_id=915c3fcb-75f4-4aab-a82e-cdebf5bf271f&limit=50 => [200] OK
+6. [GET] http://localhost:3000/api/v1/creations?product_id=915c3fcb-75f4-4aab-a82e-cdebf5bf271f&limit=50 => [200] OK
+7. [GET] http://localhost:3000/api/v1/creations?product_id=915c3fcb-75f4-4aab-a82e-cdebf5bf271f&limit=50 => [200] OK
+11. [GET] http://localhost:3000/api/v1/analytics/ab-compare?product_id=915c3fcb-75f4-4aab-a82e-cdebf5bf271f&creation_id_a=4c7012f5-cb1c-42ef-a3ee-e2e7f1d3bf1f&creation_id_b=2f0d5b44-2998-4a88-b8d5-0dec5002f7d3 => [200] OK
+12. [POST] http://localhost:3000/api/v1/analytics/self-heal => [201] Created
+
+Note: 3 static requests not shown, run with "static" option to see them.

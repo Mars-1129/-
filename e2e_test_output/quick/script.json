@@ -1,0 +1,87 @@
+{
+  "title": "智能无线卷发棒Pro 快速搞定氛围感卷发",
+  "video_duration": 14.2,
+  "style_vibe": "clean-tech极简科技风，明亮清爽，突出高效便捷的造型体验",
+  "shots": [
+    {
+      "shot_index": 1,
+      "duration": 3,
+      "scene_description_query": "young professional woman checking watch worriedly in bright minimalist bedroom",
+      "visual_description": "明亮极简的卧室内，28岁左右职场女性着急出门，低头看手表面露焦虑",
+      "camera_movement": "Static",
+      "transition_type": "None",
+      "voiceover_text": "赶时间出门还在为卷发发愁？",
+      "subtitle_text": "赶时间出门还在为卷发发愁？",
+      "safe_zone_bounding_box": [
+        0.1,
+        0.7,
+        0.9,
+        0.9
+      ]
+    },
+    {
+      "shot_index": 2,
+      "duration": 3.2,
+      "scene_description_query": "close up of white smart wireless curling iron with temperature control display",
+      "visual_description": "特写乳白色智能无线卷发棒Pro，机身亮起3档控温显示屏，质感高级简洁",
+      "camera_movement": "Dolly_In_Fast",
+      "transition_type": "Dissolve",
+      "voiceover_text": "这款智能无线卷发棒帮你搞定",
+      "subtitle_text": "3档智能控温 不伤发",
+      "safe_zone_bounding_box": [
+        0.1,
+        0.7,
+        0.9,
+        0.9
+      ]
+    },
+    {
+      "shot_index": 3,
+      "duration": 3.5,
+      "scene_description_query": "woman using wireless curling iron to curl hair easily, anti-scald design visible",
+      "visual_description": "女生轻松拿起卷发棒操作，几秒就卷好一绺蓬松卷发，防烫外壳碰到手也没有不适反应",
+      "camera_movement": "Static",
+      "transition_type": "Wipe",
+      "voiceover_text": "无线设计随行随用，防烫更安全",
+      "subtitle_text": "无线便携 防烫设计更安全",
+      "safe_zone_bounding_box": [
+        0.1,
+        0.7,
+        0.9,
+        0.9
+      ]
+    },
+    {
+      "shot_index": 4,
+      "duration": 2.5,
+      "scene_description_query": "close up of curling iron type-c charging port with 10min fast charging icon",
+      "visual_description": "特写卷发棒Type-C充电口，屏幕弹出10分钟快充的提示标识",
+      "camera_movement": "Dolly_In_Fast",
+      "transition_type": "Dissolve",
+      "voiceover_text": "10分钟快充就能续航全天",
+      "subtitle_text": "10分钟快充 续航全天",
+      "safe_zone_bounding_box": [
+        0.1,
+        0.7,
+        0.9,
+        0.9
+      ]
+    },
+    {
+      "shot_index": 5,
+      "duration": 2,
+      "scene_description_query": "woman with bouncy curly hair putting curling iron into small handbag smiling",
+      "visual_description": "女生顶着蓬松自然的卷发，笑着把卷发棒放进随身小包里，拎包准备出门",
+      "camera_movement": "Static",
+      "transition_type": "Fade_In",
+      "voiceover_text": "出门带它太方便啦",
+      "subtitle_text": "点击小黄车get同款",
+      "safe_zone_bounding_box": [
+        0.1,
+        0.7,
+        0.9,
+        0.9
+      ]
+    }
+  ]
+}

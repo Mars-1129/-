@@ -1,0 +1,81 @@
+{
+  "annotations": { "list": [] },
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 0,
+  "id": null,
+  "links": [],
+  "panels": [
+    {
+      "datasource": { "type": "prometheus", "uid": "tikstream-prometheus" },
+      "fieldConfig": {
+        "defaults": { "color": { "mode": "palette-classic" }, "unit": "reqps" }
+      },
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 0 },
+      "id": 1,
+      "options": { "legend": { "displayMode": "table", "placement": "bottom" } },
+      "targets": [
+        { "expr": "sum(rate(http_server_duration_milliseconds_count[1m])) by (http_route)", "legendFormat": "{{http_route}}" }
+      ],
+      "title": "QPS (每秒请求数)",
+      "type": "timeseries"
+    },
+    {
+      "datasource": { "type": "prometheus", "uid": "tikstream-prometheus" },
+      "fieldConfig": { "defaults": { "unit": "ms" } },
+      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 0 },
+      "id": 2,
+      "options": { "legend": { "displayMode": "table", "placement": "bottom" } },
+      "targets": [
+        { "expr": "histogram_quantile(0.50, sum(rate(http_server_duration_milliseconds_bucket[5m])) by (le, http_route))", "legendFormat": "P50 {{http_route}}" },
+        { "expr": "histogram_quantile(0.95, sum(rate(http_server_duration_milliseconds_bucket[5m])) by (le, http_route))", "legendFormat": "P95 {{http_route}}" },
+        { "expr": "histogram_quantile(0.99, sum(rate(http_server_duration_milliseconds_bucket[5m])) by (le, http_route))", "legendFormat": "P99 {{http_route}}" }
+      ],
+      "title": "响应延迟 P50/P95/P99",
+      "type": "timeseries"
+    },
+    {
+      "datasource": { "type": "prometheus", "uid": "tikstream-prometheus" },
+      "fieldConfig": { "defaults": { "unit": "percentunit", "min": 0, "max": 1 } },
+      "gridPos": { "h": 8, "w": 6, "x": 0, "y": 8 },
+      "id": 3,
+      "targets": [
+        { "expr": "sum(rate(http_server_duration_milliseconds_count{http_status_code=~\"5..\"}[5m])) / sum(rate(http_server_duration_milliseconds_count[5m]))", "legendFormat": "5xx Error Rate" }
+      ],
+      "title": "错误率",
+      "type": "stat"
+    },
+    {
+      "datasource": { "type": "prometheus", "uid": "tikstream-prometheus" },
+      "gridPos": { "h": 8, "w": 9, "x": 6, "y": 8 },
+      "id": 4,
+      "options": { "legend": { "displayMode": "table", "placement": "right" } },
+      "targets": [
+        { "expr": "sum(rate(http_server_duration_milliseconds_count[5m])) by (http_route)", "legendFormat": "{{http_route}}" }
+      ],
+      "title": "端点请求分布",
+      "type": "piechart"
+    },
+    {
+      "datasource": { "type": "prometheus", "uid": "tikstream-prometheus" },
+      "fieldConfig": { "defaults": { "unit": "short" } },
+      "gridPos": { "h": 8, "w": 9, "x": 15, "y": 8 },
+      "id": 5,
+      "targets": [
+        { "expr": "process_resident_memory_bytes / 1024 / 1024", "legendFormat": "RSS (MB)" },
+        { "expr": "process_heap_bytes / 1024 / 1024", "legendFormat": "Heap (MB)" }
+      ],
+      "title": "内存使用",
+      "type": "timeseries"
+    }
+  ],
+  "refresh": "10s",
+  "schemaVersion": 39,
+  "tags": ["tikstream", "api"],
+  "time": { "from": "now-1h", "to": "now" },
+  "timepicker": {},
+  "timezone": "browser",
+  "title": "TikStream API 概览",
+  "uid": "tikstream-api-overview",
+  "version": 1
+}
