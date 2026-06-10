@@ -1300,6 +1300,34 @@ export class CreationRepository {
     }
   }
 
+  /**
+   * 查找所有存在卡在指定阶段的创作的 product_id（去重）
+   * 用于 Cron 定时巡检，避免遍历所有商品
+   */
+  async findDistinctProductIdsWithStuckQueueAllocations(params: {
+    stage: string;
+    stuckThresholdMs: number;
+  }): Promise<string[]> {
+    try {
+      const thresholdDate = new Date(Date.now() - params.stuckThresholdMs);
+
+      const rows = await this.prisma.creation.findMany({
+        where: {
+          currentStage: params.stage as CreationStage,
+          status: 'PENDING',
+          createdAt: { lt: thresholdDate },
+        },
+        select: { productId: true },
+        distinct: ['productId'],
+      });
+
+      return rows.map((r) => r.productId);
+    } catch (error) {
+      this.logger.error(`Failed to find distinct product IDs for stuck creations: ${(error as Error).message}`);
+      throw this.mapPrismaError(error);
+    }
+  }
+
   async markCreationFailed(
     creationId: string,
     params: { errorCode: string; errorMessage: string; currentStage: string; traceId?: string },

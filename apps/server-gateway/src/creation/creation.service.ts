@@ -3,6 +3,7 @@
 // =============================================================================
 
 import { Injectable, Logger, Inject, HttpStatus, Optional } from '@nestjs/common';
+import { Cron } from '@nestjs/schedule';
 import { MetricsService } from '../metrics/metrics.service';
 import { randomUUID } from 'node:crypto';
 import { Queue } from 'bullmq';
@@ -1743,7 +1744,7 @@ export class CreationService {
         error_message: sr.errorMessage ?? null,
         seedance_prompt: sr.seedancePrompt ?? undefined,
         updated_at: sr.updatedAt.toISOString(),
-      }));
+      })) as CreationDetailShotRender[];
 
     return {
       creation_id: record.id,
@@ -2570,7 +2571,15 @@ export class CreationService {
     }
 
     const restitchRenderPaths = finishedShots.map((sr) => {
-      const resolved = this.resolveMediaUrl(sr.renderPath);
+      // Worker 本地 artifact 路径不需要 URL 转换，直接透传。
+      // resolveMediaUrl 会把 /tmp/... 映射为 http://localhost:3000/tmp/...，
+      // Worker 从 Gateway 下载该 URL 会得到损坏文件 → FFmpeg moov atom not found。
+      const isLocalWorkerPath = sr.renderPath && (
+        sr.renderPath.startsWith('/tmp/') ||
+        sr.renderPath.startsWith('/workspace/') ||
+        sr.renderPath.startsWith('/var/')
+      );
+      const resolved = isLocalWorkerPath ? sr.renderPath : this.resolveMediaUrl(sr.renderPath);
       return {
         shot_index: sr.shotIndex,
         render_path: resolved ?? sr.renderPath,
@@ -3484,6 +3493,84 @@ export class CreationService {
       stuck_creation_ids: stillStuck.map((c) => c.creation_id),
       auto_failed_count: autoFailedCount,
     };
+  }
+
+  // ===========================================================================
+  // N.1: autoScanStuckCreations — @Cron 自动巡检（每2分钟）
+  // 当 remotion-render-worker 宕机时，自动检测并标记超时创作，避免永久卡死
+  // ===========================================================================
+
+  @Cron('*/2 * * * *')
+  async autoScanStuckCreations(): Promise<void> {
+    const STUCK_THRESHOLD_MS = CREATION_CONSTANTS.STUCK_DETECTION.STUCK_THRESHOLD_MS;
+    const AUTO_FAIL_THRESHOLD_MS = CREATION_CONSTANTS.STUCK_DETECTION.AUTO_FAIL_THRESHOLD_MS;
+
+    try {
+      // 查找所有存在卡在 QUEUE_ALLOCATION 的创作的商品（去重）
+      const affectedProductIds = await this.repository.findDistinctProductIdsWithStuckQueueAllocations({
+        stage: 'QUEUE_ALLOCATION',
+        stuckThresholdMs: STUCK_THRESHOLD_MS,
+      });
+
+      if (affectedProductIds.length > 0) {
+        this.logger.log(
+          `[Cron/StuckScan] Found ${affectedProductIds.length} product(s) with stuck QUEUE_ALLOCATION creations, scanning...`,
+        );
+
+        for (const productId of affectedProductIds) {
+          try {
+            const result = await this.checkStuckCreations(productId);
+            if (result.auto_failed_count > 0) {
+              this.logger.warn(
+                `[Cron/StuckScan] product=${productId} auto_failed=${result.auto_failed_count} stuck_ids=${result.stuck_creation_ids.join(',')}`,
+              );
+            }
+          } catch (e) {
+            // 单个商品扫描失败不影响其他商品
+          }
+        }
+      }
+    } catch (error) {
+      this.logger.error(
+        `[Cron/StuckScan] QUEUE_ALLOCATION scan failed: ${(error as Error).message}`,
+      );
+    }
+
+    // 同时检查 LOUDNORM_COMPLIANCE 卡住的任务
+    const LOUDNORM_STUCK_THRESHOLD_MS = CREATION_CONSTANTS.STUCK_DETECTION.LOUDNORM_STUCK_THRESHOLD_MS;
+    const LOUDNORM_AUTO_FAIL_MS = CREATION_CONSTANTS.STUCK_DETECTION.LOUDNORM_AUTO_FAIL_MS;
+
+    try {
+      const stuckLoudnormCreations = await this.repository.findStuckQueueAllocations({
+        stage: 'LOUDNORM_COMPLIANCE',
+        stuckThresholdMs: LOUDNORM_STUCK_THRESHOLD_MS,
+        status: 'PROCESSING',
+      });
+
+      for (const creation of stuckLoudnormCreations) {
+        const elapsed = Date.now() - new Date(creation.updated_at || creation.created_at).getTime();
+
+        if (elapsed > LOUDNORM_AUTO_FAIL_MS) {
+          try {
+            await this.repository.markCreationFailed(creation.creation_id, {
+              errorCode: 'LOUDNORM_COMPLIANCE_STUCK',
+              errorMessage: `创作卡在响度合规阶段 (已 ${Math.round(elapsed / 1000)}s)，可能为 Export 回调失败导致，请重试`,
+              currentStage: 'LOUDNORM_COMPLIANCE',
+              traceId: `trc_loudnorm_cron_${randomUUID().slice(0, 8)}`,
+            });
+            this.logger.error(
+              `[Cron/StuckScan] Auto-failed creation ${creation.creation_id} stuck at LOUDNORM_COMPLIANCE for ${Math.round(elapsed / 1000)}s`,
+            );
+          } catch (e) {
+            this.logger.error(
+              `[Cron/StuckScan] Failed to auto-fail LOUDNORM creation ${creation.creation_id}: ${(e as Error).message}`,
+            );
+          }
+        }
+      }
+    } catch (error) {
+      // LOUDNORM 扫描失败不影响 QUEUE_ALLOCATION 检测
+    }
   }
 
   // ===========================================================================

@@ -679,6 +679,9 @@ async function processCreationJob(job: Job<CreationJobPayload>): Promise<{ video
     const videoPaths: string[] = [];
     const voiceoverPaths: string[] = [];
     const subtitles: SubtitleEntry[] = [];
+    // 旁白显式延迟与时长（与 voiceoverPaths 有效条目一一对应）
+    let voiceoverDelays: number[] = [];
+    let voiceoverDurations: number[] = [];
     let currentTime = 0;
     let artifact: { fileName: string; filePath: string; publicUrl: string; fileSizeBytes: number } | null = null;
 
@@ -890,16 +893,29 @@ async function processCreationJob(job: Job<CreationJobPayload>): Promise<{ video
       voiceoverPaths.push(result.voiceoverPath);
 
       if (result.subtitleEntry) {
-        // 先捕获原始时长，避免 start 被修改后计算错误
-        const originalDuration = result.subtitleEntry.end - result.subtitleEntry.start;
+        // 使用分镜时长而非 TTS 估算时长，防止字幕溢出到下一分镜
+        const subtitleDuration = result.subtitleEntry.end - result.subtitleEntry.start;
+        const cappedDuration = Math.min(subtitleDuration, result.duration || subtitleDuration);
         subtitles.push({
           ...result.subtitleEntry,
           start: currentTime,
-          end: currentTime + originalDuration,
+          end: currentTime + cappedDuration,
         });
       }
 
       currentTime += result.duration;
+    }
+
+    // 构建旁白显式延迟和时长（与 voiceoverPaths 有效条目一一对应），防止 TTS 音频超长或索引错位
+    voiceoverDelays = [];
+    voiceoverDurations = [];
+    let cumDelay = 0;
+    for (const result of shotResults) {
+      if (result.voiceoverPath?.trim()) {
+        voiceoverDelays.push(cumDelay);
+        voiceoverDurations.push(result.duration);
+      }
+      cumDelay += result.duration;
     }
     } // end else (non-restitch_only AI generation block)
 
@@ -993,6 +1009,8 @@ async function processCreationJob(job: Job<CreationJobPayload>): Promise<{ video
     const stitchResult = await stitchService.stitch({
       videoPaths,
       voiceoverPaths,
+      voiceoverDelays,
+      voiceoverDurations,
       bgmPath,
       bgmVolume: payload.audio_mix_config?.bgm_volume,
       voiceoverVolume: payload.audio_mix_config?.voiceover_volume,

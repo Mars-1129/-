@@ -226,6 +226,7 @@ services:
       - "15173:5173"
     environment:
       VITE_API_BASE_URL: ""
+      VITE_ARTIFACT_PROXY_TARGET: "http://remotion-render-worker:3102"
     healthcheck:
       test: ["CMD-SHELL", "node -e \"fetch('http://127.0.0.1:5173').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))\""]
       interval: 10s
@@ -299,6 +300,7 @@ services:
       REDIS_URL: redis://redis:6379
       REDIS_QUEUE_DB: 1
       REMOTION_RENDER_WORKER_PORT: 3102
+      CREATION_WORKER_CONCURRENCY: 2
       GATEWAY_BASE_URL: http://server-gateway:3000
       REMOTION_RENDER_PUBLIC_BASE_URL: http://localhost:3102
       CHROMIUM_BINARY: chromium
@@ -318,7 +320,7 @@ services:
       MINIO_BUCKET_NAME: ${MINIO_BUCKET_NAME:-tikstream-assets}
       MINIO_PUBLIC_ENDPOINT: ${MINIO_PUBLIC_ENDPOINT:-http://localhost:9000}
       TTS_PROVIDER: ${TTS_PROVIDER:-siliconflow}
-      SILICONFLOW_API_KEY: ${SILICONFLOW_API_KEY:-}
+      SILICONFLOW_API_KEY: ${SILICONFLOW_API_KEY:-sk-onxfpomwarftotcnhrnrfxvbyebizqoljjevkgvagxarkhhs}
       INTERNAL_API_TOKEN: ${INTERNAL_API_TOKEN:-tikstream-internal-dev-token}
       VOLC_TTS_API_URL: ${VOLC_TTS_API_URL:-https://openspeech.bytedance.com/api/v1/tts}
       VOLC_TTS_API_KEY: ${VOLC_TTS_API_KEY:-}

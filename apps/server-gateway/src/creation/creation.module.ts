@@ -3,6 +3,7 @@
 // =============================================================================
 
 import { Module } from '@nestjs/common';
+import { ScheduleModule } from '@nestjs/schedule';
 import { PrismaModule } from '@nestjs/prisma';
 import { MaterialModule } from '../material/material.module';
 import { ScriptModule } from '../script/script.module';
@@ -21,7 +22,7 @@ import { ProductUrlParserProvider } from '../../services/ai/product-url-parser.p
 import { ProductRecognitionProvider } from '../../services/ai/product-recognition.provider';
 
 @Module({
-  imports: [PrismaModule, MaterialModule, ScriptModule, ProductModule, SubtitleModule, OriginalityModule, AsrSubtitleModule],
+  imports: [ScheduleModule.forRoot(), PrismaModule, MaterialModule, ScriptModule, ProductModule, SubtitleModule, OriginalityModule, AsrSubtitleModule],
   controllers: [CreationController, InternalCreationController],
   providers: [
     CreationService,

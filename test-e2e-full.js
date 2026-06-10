@@ -1,7 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 
-const API_KEY = 'ark-1249de72-68c5-4737-8777-789f626d0a3b-c7bc9';
+const API_KEY = 'ark-973d982f-14a0-467b-822f-94292c1184bc-4f013';
 const TEXT_EP = 'ep-20260514115629-vhldw';
 const VIDEO_EP = 'ep-20260514120705-pqv86';
 const TEXT_URL = 'https://ark.cn-beijing.volces.com/api/v3/chat/completions';

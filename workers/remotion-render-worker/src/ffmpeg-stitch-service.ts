@@ -51,6 +51,10 @@ export interface VoiceEnhancementConfig {
 export interface StitchInput {
   videoPaths: string[];
   voiceoverPaths?: string[];
+  /** 旁白显式延迟（秒），与 voiceoverPaths 有效条目一一对应，避免过滤后索引错位 */
+  voiceoverDelays?: number[];
+  /** 旁白预期时长（秒），与 voiceoverPaths 有效条目一一对应，用于 atrim 截断防止溢出重叠 */
+  voiceoverDurations?: number[];
   bgmPath?: string;
   bgmVolume?: number;
   voiceoverVolume?: number;
@@ -138,6 +142,8 @@ export class FfmpegStitchService {
       cropRegions,
       voiceEnhancement,
       expectedTotalDuration,
+      voiceoverDelays,
+      voiceoverDurations,
     } = input;
 
     this.tempFiles = [];
@@ -346,10 +352,16 @@ export class FfmpegStitchService {
         for (let vi = 0; vi < validVoiceovers.length; vi++) {
           const label = `[a${audioIdx}]`;
           const inputIdx = inputCount + vi;
-          // Voiceover delay matches the corresponding shot's cumulative start time
-          const delayMs = vi < cumulativeDelays.length ? Math.round(cumulativeDelays[vi] * 1000) : 0;
+          // 使用显式传入的延迟（与分镜位置一一对应），回退到累计延迟
+          const delaySec = voiceoverDelays?.[vi]
+            ?? (vi < cumulativeDelays.length ? cumulativeDelays[vi] : 0);
+          const delayMs = Math.round(delaySec * 1000);
           const adelayFilter = delayMs > 0 ? `adelay=${delayMs}|${delayMs},` : '';
-          audioFilters.push(`[${inputIdx}:a]${adelayFilter}volume=${voiceoverVolume}${voiceEnhanceChain}${label}`);
+          // 截断旁白音频到分镜时长，防止 TTS 合成长度超出分镜导致旁白重叠
+          const voiceoverDuration = voiceoverDurations?.[vi];
+          const atrimFilter = voiceoverDuration && voiceoverDuration > 0
+            ? `atrim=duration=${voiceoverDuration},` : '';
+          audioFilters.push(`[${inputIdx}:a]${adelayFilter}${atrimFilter}volume=${voiceoverVolume}${voiceEnhanceChain}${label}`);
           audioLabels.push(label);
           audioIdx++;
         }
